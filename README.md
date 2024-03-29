@@ -58,5 +58,5 @@ Abreviaturas de nombres de los distintos modulos:
 
 **TModel:** Modulos de prueba que sirven para probar nuevas funcionalidades
 
-**App: ** Archivo principal para ejecutar todo el programa
+**App:** Archivo principal para ejecutar todo el programa
 
