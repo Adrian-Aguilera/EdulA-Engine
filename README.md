@@ -52,3 +52,9 @@ Abreviaturas de nombres de los distintos modulos:
 `EngineAV: virtual assistant`
 
 `EngineChat: Chat Engine`
+
+## Estructura:
+**Modules:** Modulos para usarse en App principal
+**TModel:** Modulos de prueba que sirven para probar nuevas funcionalidades
+**App: ** Archivo principal para ejecutar todo el programa
+
