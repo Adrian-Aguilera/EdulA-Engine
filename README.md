@@ -31,6 +31,24 @@ una vez instalado y corriendo la terminal del .venv, instalar las dependencias c
   pip install -r requirements.txt
 ```
 
+## Deployment
+
+Ejecutar servidor
+
+```bash
+  python manage.py runserver
+```
+
+
+
+
+## Informacion Adicional
+
+Crear una aplicacion con django
+
+```bash
+  python manage.py startapp {name_app}
+```
 
 ## Herramientas
 
