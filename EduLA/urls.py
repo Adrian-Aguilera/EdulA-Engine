@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
@@ -35,8 +36,13 @@ schema_view = get_schema_view(
    #permission_classes=(permissions.AllowAny,),
 )
 
+#vista error 504
+handler504 = 'EduLA.views.error_504'
+handler404 = 'EduLA.views.error_404'
+
 urlpatterns = [
     #rutas para apis
+    path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('EduApp.urls')),
     
