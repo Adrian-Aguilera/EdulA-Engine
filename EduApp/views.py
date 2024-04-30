@@ -25,3 +25,11 @@ def test(request):
         return Response({'respuesta': True})
     else:
         return Response({'fail': False})
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_option(request):
+    if request.method == "GET":
+        return Response({"respuesta": "GET"})
+    else:
+        return Response({"Error": "Metodo no disponible"})

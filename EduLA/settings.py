@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'EduApp',
     'rest_framework',
     'sslserver',
+    'drf_yasg',
 ]
 
 REST_FRAMEWORK = {
