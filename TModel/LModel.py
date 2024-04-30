@@ -2,7 +2,7 @@ from openai import OpenAI
 import threading
 import time
 
-client = OpenAI(base_url="https://42b6-190-62-84-58.ngrok-free.app/v1", api_key="lm-studio")
+client = OpenAI(base_url="https://25a7-190-62-84-70.ngrok-free.app/v1", api_key="lm-studio")
 
 def loading_animation():
     global animation_running

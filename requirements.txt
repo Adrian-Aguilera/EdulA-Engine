@@ -2,3 +2,13 @@ python-dotenv
 requests
 google-generativeai
 openai
+aiohttp
+django
+djangorestframework
+markdown
+django-filter
+djangorestframework-simplejwt
+djangorestframework 
+simplejwt 
+django-cors-headers
+django-sslserver
