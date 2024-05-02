@@ -69,7 +69,7 @@ Crear usuario administrador
         "EngineAV": false,
         "EngineChat": true
     },
-    "mesage": "eres un tutor digital diseñado por ITCA?"
+    "mesage": "{mensaje}"
 }
 
 ```
