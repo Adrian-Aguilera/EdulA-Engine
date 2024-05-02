@@ -33,12 +33,17 @@ una vez instalado y corriendo la terminal del .venv, instalar las dependencias c
 
 ## Deployment
 
-Ejecutar servidor
+Ejecutar servidor local
+
+```bash
+  python manage.py runserver
+```
+
+Ejecutar servidor local  con certificado ssl (recomendado)
 
 ```bash
   python manage.py runsslserver
 ```
-
 
 ## Informacion Adicional
 
