@@ -62,6 +62,19 @@ Crear usuario administrador
   python manage.py createsuperuser
 ```
 
+## JSON Input:
+```yaml
+{
+    "type_engine": {
+        "EngineAV": false,
+        "EngineChat": true
+    },
+    "mesage": "eres un tutor digital diseñado por ITCA?"
+}
+
+```
+
+
 ## Herramientas
 
 **Lenguaje:** python
