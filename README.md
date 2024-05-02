@@ -36,10 +36,8 @@ una vez instalado y corriendo la terminal del .venv, instalar las dependencias c
 Ejecutar servidor
 
 ```bash
-  python manage.py runserver
+  python manage.py runsslserver
 ```
-
-
 
 
 ## Informacion Adicional
@@ -74,19 +72,16 @@ Crear usuario administrador
 
 ```
 
-
 ## Herramientas
 
 **Lenguaje:** python
+**FrameWork** Django restFramework
 
 
 ## Modulos
-
-
 **ControllerrApp:** controlador que contiene todo el codigo principal
 
-**DotEnv:** Modulo para cargar variables de entorno dinamicamente
-
+**LModel:** Modulo de conexion con IA
 
 ## Feedback
 
@@ -101,5 +96,8 @@ Abreviaturas de nombres de los distintos modulos:
 
 **TModel:** Modulos de prueba que sirven para probar nuevas funcionalidades
 
-**App:** Archivo principal para ejecutar todo el programa
+**EduLA:** Proyecto principal de Django RestFramework
+
+**EduApp:** Aplicacion principal de Django
+
 
