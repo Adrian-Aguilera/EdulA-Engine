@@ -33,10 +33,11 @@ class LModel():
                 completion = self.client.chat.completions.create(
                     model=model,
                     messages=messages,
-                    temperature=0.4,
+                    stream=True, 
+                    temperature=0.0,
                     max_tokens=150,
                 )
-            finally:
+            finally:    
                 self.animation_running = False
                 animation_thread.join()
 
@@ -44,3 +45,23 @@ class LModel():
             print("Assistant:", chat_response)
             messages.append({"role": "assistant", "content": chat_response})
             
+    def response_chat(self, model, sys_content, message_user):
+        histoy_conversation = []
+        histoy_conversation.append({"role": "system", "content": sys_content})
+        histoy_conversation.append({"role": "user", "content": message_user})
+        try:
+            completion = self.client.chat.completions.create(
+                model=model,
+                messages=histoy_conversation,
+                #stream=True, 
+                temperature=0.0,
+                max_tokens=150,
+            )
+            message_return = completion.choices[0].message.content
+            return ({
+                "response": message_return
+            })
+        except Exception as e:
+            return ({
+                "error_model":f"{str(e)}"
+            })
