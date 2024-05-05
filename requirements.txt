@@ -13,3 +13,4 @@ simplejwt
 django-cors-headers
 django-sslserver
 drf-yasg
+djongo

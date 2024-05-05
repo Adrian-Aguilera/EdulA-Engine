@@ -2,9 +2,8 @@
 from django.shortcuts import render
 from Modules.LModel import *
 from Controller.ControllerApp import *
-from django.http import HttpResponse
 from dotenv import load_dotenv
-import os
+from asgiref.sync import async_to_sync
 
 #importacion de django-rest.
 from rest_framework.permissions import IsAuthenticated
@@ -16,9 +15,8 @@ load_dotenv()
 
 def main_engine(type_engine, message):
     engine = ControllerEduIA(EngineAV=type_engine.get('EngineAV', False), EngineChat=type_engine.get('EngineChat', False))
-    model_main = engine.main_engine(message)
-    return model_main
-
+    #model_main = engine.main_engine(message)
+    return async_to_sync(engine.main_engine)(message)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])  

@@ -100,7 +100,19 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+#configuracion para usar mongodb como base de datos
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': '[db_nombre]',
+        'CLIENT': {
+            'host': 'mongodb://usuario:contraseña@host:puerto/db_nombre',
+            'port': 27017
+        }
+    }
+}
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
