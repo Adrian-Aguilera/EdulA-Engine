@@ -1,6 +1,7 @@
 from openai import OpenAI
 import threading
 import time
+import asyncio
 
 class LModel():
     def __init__(self, api_key, model_point):
@@ -45,7 +46,7 @@ class LModel():
             print("Assistant:", chat_response)
             messages.append({"role": "assistant", "content": chat_response})
             
-    def response_chat(self, model, sys_content, message_user):
+    async def response_chat(self, model, sys_content, message_user):
         histoy_conversation = []
         histoy_conversation.append({"role": "system", "content": sys_content})
         histoy_conversation.append({"role": "user", "content": message_user})
