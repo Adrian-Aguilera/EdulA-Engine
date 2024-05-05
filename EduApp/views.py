@@ -9,6 +9,8 @@ from asgiref.sync import async_to_sync
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 #cargando variables de entorno
 load_dotenv()
@@ -18,9 +20,28 @@ def main_engine(type_engine, message):
     #model_main = engine.main_engine(message)
     return async_to_sync(engine.main_engine)(message)
 
+#parametros para el swagger
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'type_engine': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'EngineAV': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                    'EngineChat': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                },
+                required=['EngineAV', 'EngineChat']
+            ),
+            'mesage': openapi.Schema(type=openapi.TYPE_STRING),
+        },
+        required=['type_engine', 'mesage']
+    )
+)
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])  
-def get_response(request):
+def get_general_chat(request):
     if request.method == "POST":
         try:
             data_requests = request.data
@@ -31,7 +52,52 @@ def get_response(request):
         except Exception as e:
             return Response({"error": f"{str(e)}"})
     else:
-        return Response({"error": "metodo utilizado es distinto a POST"})
+        return Response({"error": "metodo no disponible"})
+
+
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'id_users': openapi.Schema(type=openapi.TYPE_STRING),
+            'type_engine': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'EngineAV': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                },
+                required=['EngineAV']
+            ),
+            'id_message': openapi.Schema(type=openapi.TYPE_STRING),
+            'user_message': openapi.Schema(type=openapi.TYPE_STRING),
+            'history_chat': openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'system_response': openapi.Schema(type=openapi.TYPE_STRING),
+                    'user_response': openapi.Schema(type=openapi.TYPE_STRING)
+                }
+            ),
+        },
+        required=['id_users', 'type_engine', 'id_message', 'user_message']
+    )
+)
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_response_AV(requests):
+    if requests.method == "POST":
+        try:
+            data_requests = requests.data
+            id_users= data_requests.get("id_users")
+            type_engine = data_requests.get("type_engine").get("EngineAV")
+            id_message = data_requests.get("id_message")
+            user_message = data_requests.get("user_message")
+            history_system = data_requests.get("history_chat").get("system_response")
+            history_user = data_requests.get("history_chat").get("user_response")
+            return Response({"data": f"{history_user}"})
+        except Exception as e:
+            return Response({"Error": "Fail get data"})
+    else:
+        return Response({"error": "metodo no disponible"})
 
 
 @api_view(["POST"])
