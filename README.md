@@ -65,16 +65,29 @@ Crear usuario administrador
   python manage.py createsuperuser
 ```
 
-## JSON Input:
+## JSON general chat:
 ```yaml
 {
     "type_engine": {
-        "EngineAV": false,
         "EngineChat": true
     },
     "mesage": "{mensaje}"
 }
-
+```
+## JSON av chat:
+```yaml
+{
+    "id_users": "TDS10052302",
+    "type_engine": {
+        "EngineAV": true
+    },
+    "id_message": "m01tds10052302",
+    "user_message": "de que institucion eres?",
+    "history_chat": {
+        "system_response":"",
+        "user_response": ""
+    }
+}
 ```
 
 ## Herramientas
