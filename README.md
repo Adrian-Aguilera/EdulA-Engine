@@ -65,7 +65,7 @@ Crear usuario administrador
   python manage.py createsuperuser
 ```
 
-## JSON general chat:
+## Json general chat:
 ```yaml
 {
     "type_engine": {
@@ -74,7 +74,7 @@ Crear usuario administrador
     "mesage": "{mensaje}"
 }
 ```
-## JSON av chat:
+## Json av chat:
 ```yaml
 {
     "id_users": "TDS10052302",
