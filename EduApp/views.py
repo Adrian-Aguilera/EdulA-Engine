@@ -16,9 +16,21 @@ from drf_yasg import openapi
 load_dotenv()
 
 def main_engine(type_engine, message):
-    engine = ControllerEduIA(EngineAV=type_engine.get('EngineAV', False), EngineChat=type_engine.get('EngineChat', False))
-    #model_main = engine.main_engine(message)
-    return async_to_sync(engine.main_engine)(message)
+    if not type_engine:
+        return "Faltan parámetros para inicializar el motor"
+
+    engine_av = type_engine.get("EngineAV", None)
+    engine_chat = type_engine.get("EngineChat", None)
+
+    if engine_av is not None:
+        engine = ControllerEduIA(EngineAV=engine_av)
+        return async_to_sync(engine.main_engine)(message)
+
+    elif engine_chat is not None:
+        engine = ControllerEduIA(EngineChat=engine_chat)
+        return async_to_sync(engine.main_engine)(message)
+    else:
+        return "Tipo de motor no definido correctamente"
 
 #parametros para el swagger
 @swagger_auto_schema(
@@ -86,32 +98,38 @@ def get_general_chat(request):
 def get_response_AV(requests):
     if requests.method == "POST":
         try:
-            data_requests = requests.data
-            id_users= data_requests.get("id_users")
-            type_engine = data_requests.get("type_engine").get("EngineAV")
-            id_message = data_requests.get("id_message")
-            user_message = data_requests.get("user_message")
-            history_system = data_requests.get("history_chat").get("system_response")
-            history_user = data_requests.get("history_chat").get("user_response")
-            return Response({"data": f"{history_user}"})
+            data_response = unpack_json(data_input=requests)
+            if not data_response:
+                return Response({"Fail": "Json invalido"})
+            else:
+                id_users, type_engine, id_message, user_message = data_response
+                
+                #la informacion de estas variables viene de la db  y se retorna al front
+                """
+                    history_system,
+                    history_user
+                """
+                #llamada a las funciones
+                engine = main_engine(type_engine, user_message)
+                return Response({"data": f"{engine}"})
         except Exception as e:
             return Response({"Error": "Fail get data"})
     else:
         return Response({"error": "metodo no disponible"})
 
 
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def test(request):
-    if request.method == "POST":
-        return Response({'respuesta': True})
-    else:
-        return Response({'fail': False})
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def get_option(request):
-    if request.method == "GET":
-        return Response({"respuesta": "GET"})
-    else:
-        return Response({"Error": "Metodo no disponible"})
+#desenpaquetar json
+def unpack_json(data_input):
+    try:
+        data_requests = data_input.data
+        id_users= data_requests.get("id_users")
+        type_engine = data_requests.get("type_engine")
+        id_message = data_requests.get("id_message")
+        user_message = data_requests.get("user_message")
+        """
+        history_system = data_requests.get("history_chat").get("system_response")
+        history_user = data_requests.get("history_chat").get("user_response")
+        """ 
+        return id_users, type_engine, id_message, user_message
+    except TypeError:
+        return None

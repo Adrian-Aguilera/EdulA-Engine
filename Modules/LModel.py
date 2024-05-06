@@ -55,10 +55,11 @@ class LModel():
                 model=model,
                 messages=histoy_conversation,
                 #stream=True, 
-                temperature=0.0,
-                max_tokens=150,
+                temperature=0,
+                max_tokens=50,
             )
             message_return = completion.choices[0].message.content
+            print(f"data: {completion}")
             return ({
                 "response": message_return
             })
@@ -66,3 +67,7 @@ class LModel():
             return ({
                 "error_model":f"{str(e)}"
             })
+            
+    async def av_chat(self, mode, system_content, message_user):
+        
+        return message_user

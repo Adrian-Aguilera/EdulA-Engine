@@ -18,10 +18,9 @@ class ControllerEduIA:
     
     async def Edula_AV(self, message):
         edula_av = 'modulo para asistente virtual'
-        return edula_av+message
+        return edula_av
     
     async def Edula_Chat(self, message):
-        #modelo_url = "http://localhost:1234/v1"
         # Importando credenciales
         key, model_url, Model, sys_content = await self.credenciales() 
         # Cargar clase con parámetros necesarios
