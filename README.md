@@ -82,7 +82,7 @@ Crear usuario administrador
         "EngineAV": true
     },
     "id_message": "m01tds10052302",
-    "user_message": "de que institucion eres?",
+    "user_message": "{mensaje}",
     "history_chat": {
         "system_response":"",
         "user_response": ""
