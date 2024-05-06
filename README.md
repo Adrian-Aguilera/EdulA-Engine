@@ -31,19 +31,75 @@ una vez instalado y corriendo la terminal del .venv, instalar las dependencias c
   pip install -r requirements.txt
 ```
 
+## Deployment
+
+Ejecutar servidor local
+
+```bash
+  python manage.py runserver
+```
+
+Ejecutar servidor local  con certificado ssl (recomendado)
+
+```bash
+  python manage.py runsslserver
+```
+
+## Informacion Adicional
+
+Crear una aplicacion con django
+
+```bash
+  python manage.py startapp {name_app}
+```
+
+Crear migraciones del proyecto
+
+```bash
+  python manage.py makemigrations
+  python manage.py migrate
+```
+
+Crear usuario administrador
+```bash
+  python manage.py createsuperuser
+```
+
+## Json general chat:
+```yaml
+{
+    "type_engine": {
+        "EngineChat": true
+    },
+    "mesage": "{mensaje}"
+}
+```
+## Json av chat:
+```yaml
+{
+    "id_users": "TDS10052302",
+    "type_engine": {
+        "EngineAV": true
+    },
+    "id_message": "m01tds10052302",
+    "user_message": "de que institucion eres?",
+    "history_chat": {
+        "system_response":"",
+        "user_response": ""
+    }
+}
+```
 
 ## Herramientas
 
 **Lenguaje:** python
+**FrameWork** Django restFramework
 
 
 ## Modulos
-
-
 **ControllerrApp:** controlador que contiene todo el codigo principal
 
-**DotEnv:** Modulo para cargar variables de entorno dinamicamente
-
+**LModel:** Modulo de conexion con IA
 
 ## Feedback
 
@@ -58,5 +114,8 @@ Abreviaturas de nombres de los distintos modulos:
 
 **TModel:** Modulos de prueba que sirven para probar nuevas funcionalidades
 
-**App:** Archivo principal para ejecutar todo el programa
+**EduLA:** Proyecto principal de Django RestFramework
+
+**EduApp:** Aplicacion principal de Django
+
 
