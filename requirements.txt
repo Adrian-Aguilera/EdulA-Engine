@@ -14,3 +14,12 @@ django-cors-headers
 django-sslserver
 drf-yasg
 djongo
+langchain 
+langchain-community
+langchain-core
+chromadb 
+langchain-openai
+langchain-community
+langchainhub
+llama-index==0.9.1
+urllib3==1.26.18
