@@ -1,18 +1,13 @@
-from pathlib import Path
-#from langchain_openai import OpenAI,
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
-from langchain_community.vectorstores import Chroma
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
 from llama_index.vector_stores import ChromaVectorStore
-from llama_index.vector_stores import ChromaVectorStore
-from llama_index.embeddings import HuggingFaceEmbedding
 from llama_index.storage.storage_context import StorageContext
 from llama_index.service_context import ServiceContext
-from llama_index.prompts import PromptTemplate
 from llama_index import VectorStoreIndex
+from langchain_community.chat_models import ChatAnyscale
+from langchain_community.chat_models import ChatOpenAI
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 import chromadb
 from openai import OpenAI
 
@@ -58,7 +53,7 @@ presentación de la exposición
 
 # Divide los documentos en fragmentos más pequeños
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=30, chunk_overlap=10)
-#print(text_splitter)
+# print(text_splitter)
 fragmentos = text_splitter.split_documents(documentos)
 
 """"
@@ -76,18 +71,21 @@ def get_embedding(text, model="nomic-ai/nomic-embed-text-v1.5-GGUF"):
 embeddings = get_embedding(text)
 print(f"embeddings {embeddings}")
 
-
-#modelo llm
-llm = completion = client.chat.completions.create(
-  model="TheBloke/Llama-2-7B-Chat-GGUF",
-  temperature=0.0,)
-#base de datos vectorial
+modelo = 'TheBloke/Llama-2-7B-Chat-GGUF'
+# modelo llm
+llm = ChatOpenAI(
+    base_url="http://localhost:1234/v1",
+    model_name=modelo,
+    temperature=0.0,
+    openai_api_key="lm-studio"
+)
+# base de datos vectorial
 db = chromadb.PersistentClient(path="./chroma_db_HF")
 chroma_collection = db.get_or_create_collection("test_texto")
 vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
-#vectorstore = Chroma.from_documents(documents=fragmentos, embedding=embeddings)
-#Creando index mejorado
+# vectorstore = Chroma.from_documents(documents=fragmentos, embedding=embeddings)
+# Creando index mejorado
 svc = ServiceContext.from_defaults(embed_model=embeddings,llm=llm)
 stc = StorageContext.from_defaults(vector_store=vector_store)
 
