@@ -9,12 +9,7 @@ from langchain_community.chat_models import ChatAnyscale
 from langchain_community.chat_models import ChatOpenAI
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 import chromadb
-from openai import OpenAI
-
-
-# Inicializa el cliente de OpenAI
-print("Cargando modelo")
-client = OpenAI(base_url="http://localhost:1234/v1", api_key="lm-studio")
+from embedings import Embeding
 
 
 # Carga documentos desde un directorio
@@ -64,11 +59,10 @@ embeddings = OpenAIEmbeddings(
     model="nomic-ai/nomic-embed-text-v1.5-GGUF"
 )
 """
-def get_embedding(text, model="nomic-ai/nomic-embed-text-v1.5-GGUF"):
-   text = text.replace("\n", " ")
-   return client.embeddings.create(input = [text], model=model).data[0].embedding
+embeding_instance = Embeding()
 
-embeddings = get_embedding(text)
+embeddings = embeding_instance.get_embedding(text=text)
+
 print(f"embeddings {embeddings}")
 
 modelo = 'TheBloke/Llama-2-7B-Chat-GGUF'
@@ -82,7 +76,6 @@ llm = ChatOpenAI(
 # base de datos vectorial
 db = chromadb.PersistentClient(path="./chroma_db_HF")
 chroma_collection = db.get_or_create_collection("test_texto")
-vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
 # vectorstore = Chroma.from_documents(documents=fragmentos, embedding=embeddings)
 # Creando index mejorado

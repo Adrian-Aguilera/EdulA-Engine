@@ -1,8 +1,9 @@
 from pathlib import Path
 
+from langchain_community.llms import OpenAI
 import chromadb
-from openai import OpenAI
 
+from langchain_openai import OpenAIEmbeddings
 
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -12,6 +13,9 @@ from langchain import hub
 from langchain_community.vectorstores import Chroma, FAISS
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
+from langchain_community.embeddings import HuggingFaceBgeEmbeddings
+
+from embedings import Embeding
 
 print("loading model")
 client = OpenAI(base_url="http://localhost:1234/v1", api_key="not-needed")
@@ -55,15 +59,11 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=30, chunk_overlap=10)
 # print(text_splitter)
 fragmentos = text_splitter.split_documents(documentos)
 
+embeding_instance = Embeding()
 
-def get_embedding(text, model="nomic-ai/nomic-embed-text-v1.5-GGUF"):
-   text = text.replace("\n", " ")
-   return client.embeddings.create(input = [text], model=model).data[0].embedding
-
-embeddings = get_embedding(text)
-print(f"embeddings {embeddings}")
-
+embeddings = HuggingFaceBgeEmbeddings(configuration={"model": "nomic-ai/nomic-embed-text-v1.5-GGUF"})
 new_client = chromadb.EphemeralClient()
+
 vectorstore = Chroma.from_documents(documents=fragmentos, embedding=embeddings)
 print("finished the vectorestore")
 # Retrieve and generate using the relevant snippets of the blog.
