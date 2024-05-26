@@ -7,10 +7,13 @@ while True:
 
     messages.append({"role": "user", "content": user_input})
     
-    response = ollama.chat(model='llama2:chat', messages=messages)
+    response = ollama.chat(model='llama2:chat', messages=messages, stream=True)
     
-    chat_response = response['message']['content']
+    for chunk in response:
+        chat_response = chunk['message']['content']
+        print(chunk['message']['content'], end='', flush=True)
     messages.append({"role": "assistant", "content": chat_response})
-    print(chat_response)
+    
+    print("\n")
     if user_input == "salir":
         break
