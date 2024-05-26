@@ -15,3 +15,5 @@ django-sslserver
 drf-yasg
 djongo
 ollama
+gpt4all
+langchainhub

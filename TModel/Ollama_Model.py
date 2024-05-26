@@ -53,7 +53,7 @@ def rag_option():
         )
         
     # an example prompt
-    prompt = "Que hace Oscar?"
+    prompt = "Que hace Didier? y que es lo que tiene que investigar"
 
     # generate an embedding for the prompt and retrieve the most relevant doc
     response = ollama.embeddings(
@@ -61,14 +61,12 @@ def rag_option():
         model="mxbai-embed-large"
     )
     results = collection.query(
-    query_embeddings=[response["embedding"]],
-    n_results=1
+        query_embeddings=[response["embedding"]],
+        n_results=1
     )
     data = results['documents'][0][0]
-    print(data)
-    # generate a response combining the prompt and data we retrieved in step 2
     output = ollama.generate(
-        model="llama2:chat",
+        model="llama2:7b",
         prompt=f"Usa esta informacion: {data}. Responde a este mensaje: {prompt}",
         stream=True,
     )
