@@ -33,8 +33,6 @@ def rag_option():
             embeddings=[embedding],
             documents=[d]
         )
-        
-    # an example prompt
     prompt = "Que hace Didier? y que es lo que tiene que investigar"
 
     # generate an embedding for the prompt and retrieve the most relevant doc
