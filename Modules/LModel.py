@@ -6,8 +6,9 @@ import asyncio
 class LModel():
     def __init__(self, api_key, model_point):
         self.client = OpenAI(base_url=model_point, api_key=api_key)
-            
-    async def response_chat(self, model, sys_content, message_user):
+    
+    
+    async def response_chat(self, model, sys_content, message_user, mode):
         histoy_conversation = []
         histoy_conversation.append({"role": "system", "content": sys_content})
         histoy_conversation.append({"role": "user", "content": message_user})
