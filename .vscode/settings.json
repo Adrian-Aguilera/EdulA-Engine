@@ -1,6 +1,7 @@
 {
     "python.analysis.extraPaths": [
         "./Embedings",
-        "./Embedings"
+        "./Embedings",
+        "./test/Embedings"
     ]
 }
