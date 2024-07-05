@@ -3,7 +3,6 @@ from openai import OpenAI
 import chromadb
 
 
-
 def enbedings():
     embedings = ollama.embeddings(
         model='mxbai-embed-large',
@@ -18,7 +17,6 @@ def rag_option():
         "Andrew: investigar y desarrollar ejercicio de vectores en dos y tres dimensiones y agregarlo a la presentación para explicarlo en la presentación -Desarrollar simulador para vectores para presentarlo en la presentación",
         "Didier: investigar ejercicio de vectores en tres dimensiones y agregarlo a la presentación de la exposición"
     ]
-
 
 
     client = chromadb.Client()
