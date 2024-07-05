@@ -23,7 +23,7 @@ class ControllerEduIA:
         # Cargar clase con parámetros necesarios
         Lmodel = LModel(api_key=self.key, model_point=self.model_url)
         
-        fun_model = await Lmodel.response_chat(model=self.Model, sys_content=self.sys_content, message_user=message)
+        fun_model = await Lmodel.response_general(model=self.Model, sys_content=self.sys_content, message_user=message)
         message_user = fun_model
         
         return  message_user
