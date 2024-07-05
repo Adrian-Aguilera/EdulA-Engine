@@ -16,7 +16,7 @@ class LModel():
             time.sleep(0.1)
         print(" " * 20, end="\r")
 
-    def chat(self, model, sys_content, user_question):
+    
         messages = []
         print("Escribe 'salir' para terminar la conversación.")
         while True:
