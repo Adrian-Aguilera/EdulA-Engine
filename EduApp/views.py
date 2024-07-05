@@ -4,7 +4,6 @@ from Modules.IAModel import *
 from Controller.ControllerApp import *
 from dotenv import load_dotenv
 from asgiref.sync import async_to_sync
-import models
 
 #importacion de django-rest.
 from rest_framework.permissions import IsAuthenticated
