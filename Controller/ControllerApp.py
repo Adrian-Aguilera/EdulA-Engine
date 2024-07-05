@@ -20,7 +20,7 @@ class ControllerEduIA:
         edula_av = 'modulo para asistente virtual'
         return edula_av
     
-    async def Edula_Chat(self, message):
+    async def Edula_General(self, message):
         # Importando credenciales
         key, model_url, Model, sys_content = await self.credenciales() 
         # Cargar clase con parámetros necesarios
@@ -35,6 +35,6 @@ class ControllerEduIA:
         if self.EngineAV:
             return await self.Edula_AV(message)
         elif self.EngineChat:
-            return await self.Edula_Chat(message)
+            return await self.Edula_General(message)
         else:
             return "Motor no encontrado"
