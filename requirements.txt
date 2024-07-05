@@ -20,3 +20,6 @@ langchain
 langchain-community
 langchain-core
 langchain-openai
+ollama
+gpt4all
+langchainhub

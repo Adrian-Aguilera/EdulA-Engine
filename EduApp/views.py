@@ -1,6 +1,6 @@
 # Create your views here.
 from django.shortcuts import render
-from Modules.LModel import *
+from Modules.IAModel import *
 from Controller.ControllerApp import *
 from dotenv import load_dotenv
 from asgiref.sync import async_to_sync
@@ -19,15 +19,17 @@ def main_engine(type_engine, message):
     if not type_engine:
         return "Faltan parámetros para inicializar el motor"
 
+    #engine_av = asistente virtual por alumno
+    #engine_general = chat para todo los usuarios
     engine_av = type_engine.get("EngineAV", None)
-    engine_chat = type_engine.get("EngineChat", None)
+    engine_general = type_engine.get("EngineChat", None)
 
     if engine_av is not None:
         engine = ControllerEduIA(EngineAV=engine_av)
         return async_to_sync(engine.main_engine)(message)
 
-    elif engine_chat is not None:
-        engine = ControllerEduIA(EngineChat=engine_chat)
+    elif engine_general is not None:
+        engine = ControllerEduIA(EngineChat=engine_general)
         return async_to_sync(engine.main_engine)(message)
     else:
         return "Tipo de motor no definido correctamente"
@@ -42,9 +44,9 @@ def main_engine(type_engine, message):
                 type=openapi.TYPE_OBJECT,
                 properties={
                     'EngineAV': openapi.Schema(type=openapi.TYPE_BOOLEAN),
-                    'EngineChat': openapi.Schema(type=openapi.TYPE_BOOLEAN),
+                    'EngineGeneral': openapi.Schema(type=openapi.TYPE_BOOLEAN),
                 },
-                required=['EngineAV', 'EngineChat']
+                required=['EngineAV', 'EngineGeneral']
             ),
             'mesage': openapi.Schema(type=openapi.TYPE_STRING),
         },
@@ -57,10 +59,14 @@ def get_general_chat(request):
     if request.method == "POST":
         try:
             data_requests = request.data
-            type_engine_data = data_requests.get('type_engine')
+            type_engine_data = data_requests.get('type_engine').get('EngineGeneral')
             message = data_requests.get('mesage', '')
-            engine = main_engine(type_engine_data, message)
-            return Response({"data": engine})
+            if type_engine_data:
+                engine = async_to_sync(main_engine(type_engine_data, message))
+                return Response({"data": engine})
+            else:
+                return Response({"error": "Error engine activate"})
+
         except Exception as e:
             return Response({"error": f"{str(e)}"})
     else:
