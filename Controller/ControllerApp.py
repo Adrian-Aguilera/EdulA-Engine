@@ -1,7 +1,6 @@
-from Modules.LModel import *
+from Modules.IAModel import *
 from dotenv import load_dotenv
 import os
-
 #cargando variables de entorno
 load_dotenv()
 class ControllerEduIA:
@@ -13,7 +12,6 @@ class ControllerEduIA:
         self.model_url = os.environ.get('MODEL_URL')
         self.Model = os.environ.get('MODEL')
         self.sys_content = os.environ.get('SYS_CONTENT')
-    
     
     async def Edula_AV(self, message):
         edula_av = 'modulo para asistente virtual'
