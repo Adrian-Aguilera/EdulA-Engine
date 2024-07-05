@@ -8,7 +8,6 @@ class LModel():
         self.client = OpenAI(base_url=model_point, api_key=api_key)
         self.animation_running = False
 
-    def loading_animation(self):
         elementos = ['-', '\\', '|', '/']
         idx = 0
         while self.animation_running:
