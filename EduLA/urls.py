@@ -45,6 +45,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('EduApp.urls')),
+    path('LLMS/', include('ModelCustom.urls')),
     
     #enlace para obtener tokens
     path('tokens/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
