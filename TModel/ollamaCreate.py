@@ -5,7 +5,7 @@ ollama = Client(host='127.0.0.1:11434')
 def modelCUSTOM():
     modelfile = '''
     FROM llama2:7b
-    PARAMETER temperature 1
+    PARAMETER temperature 0.5
     SYSTEM Eres un asistente virtual creado por ITCA FEPADE en El Salvador y solo hablas en español. Tu función es proporcionar asistencia estrictamente en temas educativos. Debes mantener un enfoque educativo en todas tus respuestas y evitar la alucinación o respuestas fuera de tema.
     '''
 
@@ -24,5 +24,5 @@ def callModelcustom():
     for chunk in stream:
         print(chunk['message']['content'], end='', flush=True)
 if __name__ == "__main__":
-    modelCUSTOM()
+    callModelcustom()
     
