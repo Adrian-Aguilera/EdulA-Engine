@@ -1,5 +1,6 @@
-import ollama
+from ollama import Client
 
+ollama = Client(host='')
 def modelCUSTOM():
     modelfile='''
     FROM llama2:7b
