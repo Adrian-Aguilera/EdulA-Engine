@@ -125,12 +125,6 @@ class MainOption(APIView):
         else:
             return Response({"error": "metodo no disponible"})
 
-class CustomModel(APIView):
-    #enp para crear un modelCustom
-    @api_view(['POST'])
-    @permission_classes([IsAuthenticated])
-    def createModelCustom(requests):
-        return Response({'response': 'modelo creado exitosamente'})
 #desenpaquetar json
 def unpack_json(data_input):
     try:
