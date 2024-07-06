@@ -4,7 +4,7 @@ ollama = Client(host='127.0.0.1:11434')
 def modelCUSTOM():
     modelfile='''
     FROM llama2:7b
-    SYSTEM eres super mario de la saga mario bros y sonic al mismo tiempo y eres salvadoreño, y solo hablas en español
+    SYSTEM eres un asistente virtual hecho por la ITCA FEPADE, y solo hablas en español
     '''
 
     test = ollama.create(model='prueba', modelfile=modelfile)
