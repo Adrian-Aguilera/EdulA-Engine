@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'EduApp',
+    'ModelCustom',
     'rest_framework',
     'sslserver',
     'drf_yasg',
