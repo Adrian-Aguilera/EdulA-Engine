@@ -1,0 +1,12 @@
+{
+    "id_users": "TDS10052302",
+    "type_engine": {
+        "EngineAV": true
+    },
+    "id_message": "m01tds10052302",
+    "user_message": "de que institucion eres?",
+    "history_chat": {
+        "system_response":"",
+        "user_response": ""
+    }
+}
