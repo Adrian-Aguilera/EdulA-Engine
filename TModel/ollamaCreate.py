@@ -18,7 +18,7 @@ def callModelcustom():
         model='generalITCA',
         messages=[{'role': 'user', 'content': 'quien eres? y de donde eres'}],
         stream=True,
-        options={'num_ctx':50}
+        options={'num_ctx':150}
     )
 
     for chunk in stream:
