@@ -13,9 +13,38 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
 
+#ollama module
+from ollama import Client
+
+ollamaClient = Client(host='127.0.0.1:11434')
 class CustomModel(APIView):
     #enp para crear un modelCustom
     @api_view(['POST'])
     @permission_classes([IsAuthenticated])
-    def createModelCustom(requests):
-        return Response({'response': 'modelo creado exitosamente'})
+    def createModelCustom(request):
+        if request.method == "POST":
+            try:
+                dataRequests = request.data['modelfile']
+                modelfile = f'''
+                    FROM {dataRequests['modelo']}
+                    PARAMETER temperature {float(dataRequests['temperatura'])}
+                    SYSTEM {dataRequests['systemContent']}
+                '''
+                modelName = dataRequests['nombre']
+                ollamaResponse = callCreateModel(modelName=modelName, modelfile=modelfile)
+                return Response(ollamaResponse)
+            except Exception as e:
+                return Response({'Error': f'{str(e)}'})
+        else:
+            return Response({'ErrorMethod': 'Metodo no permitido'})
+        
+def callCreateModel(modelName,modelfile):
+    try:
+        ollmaResponse = ollamaClient.create(model=modelName, modelfile=modelfile)
+        if ollmaResponse['status'] == "success":
+            return {"response": "modelo creado correctamente"}
+        else:
+            return {"error": "error al crear modelo"}
+    except Exception as e:
+        return {"FatalError": f"Error al conectar ollma {str(e)}"}
+            

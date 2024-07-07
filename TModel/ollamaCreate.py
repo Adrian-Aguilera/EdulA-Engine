@@ -24,5 +24,5 @@ def callModelcustom():
     for chunk in stream:
         print(chunk['message']['content'], end='', flush=True)
 if __name__ == "__main__":
-    callModelcustom()
+    modelCUSTOM()
     
