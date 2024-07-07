@@ -25,4 +25,6 @@ def callModelcustom():
         print(chunk['message']['content'], end='', flush=True)
 if __name__ == "__main__":
     modelCUSTOM()
+    #print(ollama.show('GeneralItca'))
+    
     
