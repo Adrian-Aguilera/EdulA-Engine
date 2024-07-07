@@ -49,7 +49,22 @@ class CustomModel(APIView):
             except Exception as e:
                 return Response({"Error": "Error al motrar modelos"})
         else:
-            return Response({"Method": "Metodo no disponible    "})
+            return Response({"Method": "Metodo no disponible"})
+    
+    @api_view(['POST'])
+    @permission_classes([IsAuthenticated])
+    def searchModelCustom(request):
+        if request.method == 'POST':
+            dataRequest = request.data
+            nombreModel = dataRequest['nombre']
+            availableModel = ollamaClient.show(nombreModel)
+            if availableModel:
+                return Response({"Models": availableModel})
+            else:
+                return Response({"Models": "No se ha encontrado el modelo"})
+        
+        else:
+            return Response({"Method": "Metodo no disponible"})
                 
         
         

@@ -25,10 +25,6 @@ def callModelcustom():
     for chunk in stream:
         print(chunk['message']['content'], end='', flush=True)
 if __name__ == "__main__":
-    lista = []
-    modelAvailable = subprocess.run("ollama list", encoding='utf-8')
-    lista.append(modelAvailable)
-    print(lista)
-    #print(ollama.show('GeneralItca'))
+    print(ollama.show('GeneralItca'))
     
     
