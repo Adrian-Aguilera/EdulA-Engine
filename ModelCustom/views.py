@@ -15,8 +15,9 @@ from rest_framework.views import APIView
 
 #ollama module
 from ollama import Client
-
-ollamaClient = Client(host='127.0.0.1:11434')
+from dotenv import load_dotenv
+load_dotenv()
+ollamaClient = Client(host=str(os.environ.get("OLLAMACLIENT")))
 class CustomModel(APIView):
     #enp para crear un modelCustom
     @api_view(['POST'])
