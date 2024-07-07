@@ -4,7 +4,7 @@ from Modules.IAModel import *
 from Controller.ControllerApp import *
 from dotenv import load_dotenv
 from asgiref.sync import async_to_sync
-
+import subprocess
 #importacion de django-rest.
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -37,6 +37,20 @@ class CustomModel(APIView):
                 return Response({'Error': f'{str(e)}'})
         else:
             return Response({'ErrorMethod': 'Metodo no permitido'})
+    
+    @api_view(['GET'])
+    @permission_classes([IsAuthenticated])
+    def showAllModel(request):
+        if request.method == 'GET':
+            try:
+                modelAvailable = ollamaClient.list()  #subprocess.run("ollama list", shell=True)
+                return Response({"Models": modelAvailable})
+            except Exception as e:
+                return Response({"Error": "Error al motrar modelos"})
+        else:
+            return Response({"Method": "Metodo no disponible    "})
+                
+        
         
 def callCreateModel(modelName,modelfile):
     try:

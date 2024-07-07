@@ -1,4 +1,5 @@
 from ollama import Client
+import subprocess
 
 ollama = Client(host='127.0.0.1:11434')
 
@@ -24,7 +25,10 @@ def callModelcustom():
     for chunk in stream:
         print(chunk['message']['content'], end='', flush=True)
 if __name__ == "__main__":
-    modelCUSTOM()
+    lista = []
+    modelAvailable = subprocess.run("ollama list", encoding='utf-8')
+    lista.append(modelAvailable)
+    print(lista)
     #print(ollama.show('GeneralItca'))
     
     
