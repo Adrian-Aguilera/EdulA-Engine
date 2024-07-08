@@ -17,7 +17,7 @@ def modelCUSTOM():
 def callModelcustom():
     stream = ollama.chat(
         model='generalITCA',
-        messages=[{'role': 'user', 'content': 'quien eres? y de donde eres'}],
+        messages=[{'role': 'user', 'content': 'como pudo saber cuando son las inscriipcione:?'}],
         stream=True,
         options={'num_ctx':150}
     )
