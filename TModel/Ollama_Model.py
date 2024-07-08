@@ -20,7 +20,7 @@ def rag_option():
 
 
     client = chromadb.Client()
-    collection = client.create_collection(name="docs")
+    collection = client.create_collection(name="db_embeding")
 
     # store each document in a vector embedding database
     for i, d in enumerate(partes_exposicion_fisica):
