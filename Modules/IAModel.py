@@ -8,7 +8,7 @@ from chromadb.config import Settings
 load_dotenv()
 class LModel:
     def __init__(self, api_key=None, model_point=None):
-        self.client = OpenAI(base_url=model_point, api_key=api_key)
+        #self.client = OpenAI(base_url=model_point, api_key=api_key)
         self.modelo = os.environ.get("MODELLM")
         self.modelEmbedding= os.environ.get("MODELEMBEDDING")
         self.is_persistent = os.environ.get("IS_PERSISTENT", "False").lower() in ("true", '1', 't')
@@ -29,14 +29,13 @@ class LModel:
     #Funcion principal
     async def responseGeneral(self, message_user):
         try:
-            nameCollection = ''
-            userEmbeddings = self._responseEmbedding(message_user, nameCollection=nameCollection)
-            response = self._callGenerate(message_user, contextEmbedding=userEmbeddings)
+            nameCollection = 'Tcollection'
+            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            response = await self._callGenerate(message_user, contextEmbedding=userEmbeddings)
             if response:
                 return {"message": response}
         except Exception as e:
             return {"error": "Error al conectar la motor"}
-        return message_user
 
     async def _callGenerate(self, message_user, contextEmbedding):
         output = []
@@ -48,7 +47,7 @@ class LModel:
         for fragmento in responseCall:
             output.append(fragmento["response"], end="", flush=True)
 
-        return output
+        return  ''.join(output)
 
     async def _callEmbeding(self,promt):
         try:
@@ -82,7 +81,7 @@ class LModel:
 
     async def _responseEmbedding(self, userMessage, nameCollection):
         try:
-            userMessageEmbedding = self._callEmbeding(promt=userMessage)
+            userMessageEmbedding = await self._callEmbeding(promt=userMessage)
             Collection= self.ChromaClient.get_or_create_collection(name=nameCollection)
             results = Collection.query(
                 query_embeddings=[userMessageEmbedding["embedding"]],

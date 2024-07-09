@@ -22,7 +22,7 @@ def main_engine(type_engine, message):
     #engine_av = asistente virtual por alumno
     #engine_general = chat para todo los usuarios
     engine_av = type_engine.get("EngineAV", None)
-    engine_general = type_engine.get("EngineChat", None)
+    engine_general = type_engine.get("EngineGeneral", None)
 
     if engine_av is not None:
         engine = ControllerEduIA(EngineAV=engine_av)
@@ -61,7 +61,7 @@ class MainOption(APIView):
         if request.method == "POST":
             try:
                 data_requests = request.data
-                type_engine_data = data_requests.get('type_engine').get('EngineGeneral')
+                type_engine_data = data_requests.get('type_engine')
                 message = data_requests.get('mesage', '')
                 if type_engine_data:
                     engine = async_to_sync(main_engine(type_engine_data, message))
