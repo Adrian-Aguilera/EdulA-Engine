@@ -2,6 +2,9 @@ import ollama
 from openai import OpenAI
 import chromadb
 from chromadb.config import Settings
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 
 def enbedings():
@@ -39,12 +42,12 @@ def rag_option():
     prompt = "Que hace Didier? y que es lo que tiene que investigar"
 
     # generate an embedding for the prompt and retrieve the most relevant doc
-    response = ollama.embeddings(
+    responseInput = ollama.embeddings(
         prompt=prompt,
         model="mxbai-embed-large"
     )
     results = collectionInter.query(
-        query_embeddings=[response["embedding"]],
+        query_embeddings=[responseInput["embedding"]],
         n_results=1
     )
     data = results['documents'][0][0]
@@ -60,4 +63,10 @@ def rag_option():
         print(pieza["response"], end='', flush=True)
 
 if __name__=="__main__":
-    rag_option() 
+    rag_option()
+    '''
+    is_persistent = os.environ.get("ISPERSISTENT", "false").lower() in ("true", '1', 't')
+    if is_persistent:
+        print('true')
+    else:
+        print('false')'''

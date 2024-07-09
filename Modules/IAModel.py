@@ -2,6 +2,8 @@ from openai import OpenAI
 import ollama
 from dotenv import load_dotenv
 import os
+import chromadb
+from chromadb.config import Settings
 
 load_dotenv()
 class LModel:
@@ -9,6 +11,15 @@ class LModel:
         self.client = OpenAI(base_url=model_point, api_key=api_key)
         self.modelo = os.environ.get("MODELLM")
         self.modelEmbedding= os.environ.get("MODELEMBEDDING")
+        self.is_persistent = os.environ.get("IS_PERSISTENT", "False").lower() in ("true", '1', 't')
+        self.persist_directory = os.environ.get("PERSIST_DIRECTORY")
+        #client Chroma para que que cree la db se guarde
+        self.ChromaClient = chromadb.Client(
+            settings=Settings(
+                is_persistent=self.is_persistent,
+                persist_directory=self.persist_directory
+            )
+        )
 
     async def _callGenerate(self, system_content, message_user, embeddings=None):
         output = []
@@ -27,8 +38,8 @@ class LModel:
 
     async def response_general(self, mode, system_content, message_user):
         try:
-            embeddings = "embeddings"
-            response = self._callGenerate(system_content=system_content, message_user=message_user, )
+            reponseEmbeddings = self._callEmbeding(message_user)
+            response = self._callGenerate(system_content=system_content, message_user=message_user)
             if response:
                 return {"message": response}
         except Exception as e:
@@ -37,10 +48,29 @@ class LModel:
 
     async def _callEmbeding(self,promt):
         try:
-            reponseEmbeddings = ollama.embeddings(
+            reponseEmbeddings = await ollama.embeddings(
                 prompt=promt,
                 model=self.modelEmbedding
             )
             return reponseEmbeddings
         except Exception as e:
             return str(e)
+
+    async def _embeddingsDataBase(self, nameCollection, dataContext):
+        try:
+            operacion = True
+            Collection= self.ChromaClient.get_or_create_collection(name=nameCollection)
+            for i, d in enumerate(dataContext):
+                try:
+                    response = self._callEmbeding(model=self.modelEmbedding, prompt=d)
+                    embedding = response["embedding"]
+                    Collection.add(
+                        ids=[str(i)],
+                        embeddings=[embedding],
+                        documents=[d]
+                    )
+                except Exception as e:
+                    operacion = False
+            return operacion
+        except Exception as e:
+            return {"Expetion": f'Error al obtener Embeddig Database: {str(e)}'}
