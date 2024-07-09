@@ -20,7 +20,7 @@ class LModel:
                 persist_directory=self.persist_directory
             )
         )
-        self.ollamaClient = ollama.AsyncClient()
+        self.ollamaClient = ollama.AsyncClient(host="127.0.0.1:11434")
 
     async def av_chat(self, mode, system_content, message_user):
         return message_user

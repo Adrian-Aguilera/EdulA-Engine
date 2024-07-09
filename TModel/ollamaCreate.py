@@ -10,7 +10,7 @@ def modelCUSTOM():
     SYSTEM Eres un asistente virtual creado por ITCA FEPADE en El Salvador y solo hablas en español. Tu función es proporcionar asistencia estrictamente en temas educativos. Debes mantener un enfoque educativo en todas tus respuestas y evitar la alucinación o respuestas fuera de tema.
     '''
 
-    test = ollama.create(model='generalITCA', modelfile=modelfile)
+    test = ollama.create(model='generalITCA2', modelfile=modelfile)
     print(test) 
  
 
@@ -25,7 +25,7 @@ def callModelcustom(user_message):
     
     # Llamamos al modelo con el historial de conversación completo
     stream = ollama.chat(
-        model='generalITCA',
+        model='generalITCA2',
         messages=conversation_history,
         stream=True,
         options={'num_ctx': 150}
@@ -43,9 +43,9 @@ def callModelcustom(user_message):
 
 if __name__ == "__main__":
     #print(ollama.show('GeneralItca'))
-    #modelCUSTOM()
-    while True:
-        mensaje = input('Ingresa una duda: ')   
+    modelCUSTOM()
+    #while True:
+        #mensaje = input('Ingresa una duda: ')   
         #callModelcustom(user_message=mensaje)
         
  
