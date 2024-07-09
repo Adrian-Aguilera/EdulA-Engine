@@ -25,7 +25,7 @@ def rag_option():
     # Configurar Chroma para usar almacenamiento persistente
     client = chromadb.Client(settings=configuracion)
     #collection = client.create_collection(name="db_embeding")
-    collectionInter = client.get_or_create_collection(name="Tcollection")
+    collectionInter = client.get_collection(name="Tcollection")
 
     # store each document in a vector embedding database
     for i, d in enumerate(partes_exposicion_fisica):
@@ -48,6 +48,8 @@ def rag_option():
         n_results=1
     )
     data = results['documents'][0][0]
+    print(f'resultados de la db: {data}')
+    print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
     output = ollama.generate(
         model="llama2:7b",
         prompt=f"Usa esta informacion: {data}. Responde a este mensaje: {prompt}",
