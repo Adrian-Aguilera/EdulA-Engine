@@ -20,7 +20,7 @@ def rag_option():
     ]
 
     # Configurar Chroma para usar almacenamiento persistente
-    settings = Settings(persist_directory="./chroma_storage")
+    settings = Settings(persist_directory="./DB/Chroma_storageDB")
     client = chromadb.Client(settings=settings)
     collection = client.create_collection(name="db_embeding")
 

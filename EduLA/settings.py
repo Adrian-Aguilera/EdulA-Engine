@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'EduApp',
-    'ModelCustom',
+    'ModelCustomApp',
     'rest_framework',
     'sslserver',
     'drf_yasg',
@@ -98,7 +98,7 @@ WSGI_APPLICATION = 'EduLA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'DB/db.sqlite3',
     }
 }
 #configuracion para usar mongodb como base de datos
