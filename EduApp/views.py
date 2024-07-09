@@ -56,7 +56,7 @@ class MainOption(APIView):
         )
     )
     @api_view(["POST"])
-    @permission_classes([IsAuthenticated])  
+    @permission_classes([IsAuthenticated])
     def get_general_chat(request):
         if request.method == "POST":
             try:
