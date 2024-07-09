@@ -43,10 +43,10 @@ def callModelcustom(user_message):
 
 if __name__ == "__main__":
     #print(ollama.show('GeneralItca'))
-    modelCUSTOM()
-    #while True:
-        #mensaje = input('Ingresa una duda: ')   
-        #callModelcustom(user_message=mensaje)
+    #modelCUSTOM()
+    while True:
+        mensaje = input('Ingresa una duda: ')   
+        callModelcustom(user_message=mensaje)
         
  
         
