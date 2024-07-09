@@ -7,12 +7,13 @@ from chromadb.config import Settings
 
 load_dotenv()
 class LModel:
-    def __init__(self, api_key, model_point):
+    def __init__(self, api_key=None, model_point=None):
         self.client = OpenAI(base_url=model_point, api_key=api_key)
         self.modelo = os.environ.get("MODELLM")
         self.modelEmbedding= os.environ.get("MODELEMBEDDING")
         self.is_persistent = os.environ.get("IS_PERSISTENT", "False").lower() in ("true", '1', 't')
         self.persist_directory = os.environ.get("PERSIST_DIRECTORY")
+        self.systemContent = os.environ.get("SYS_CONTENT")
         #client Chroma para que que cree la db se guarde
         self.ChromaClient = chromadb.Client(
             settings=Settings(
@@ -25,21 +26,23 @@ class LModel:
     async def av_chat(self, mode, system_content, message_user):
         return message_user
 
-    async def response_general(self, mode, system_content, message_user):
+    #Funcion principal
+    async def responseGeneral(self, message_user):
         try:
-            reponseEmbeddings = self._callEmbeding(message_user)
-            response = self._callGenerate(system_content=system_content, message_user=message_user)
+            nameCollection = ''
+            userEmbeddings = self._responseEmbedding(message_user, nameCollection=nameCollection)
+            response = self._callGenerate(message_user, contextEmbedding=userEmbeddings)
             if response:
                 return {"message": response}
         except Exception as e:
             return {"error": "Error al conectar la motor"}
         return message_user
 
-    async def _callGenerate(self, system_content, message_user, embeddings=None):
+    async def _callGenerate(self, message_user, contextEmbedding):
         output = []
         responseCall = await ollama.generate(
             model=self.modelo,
-            prompt=f"{system_content}{embeddings}. Responde a este mensaje: {message_user}",
+            prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
             stream=True,
         )
         for fragmento in responseCall:
@@ -77,7 +80,7 @@ class LModel:
         except Exception as e:
             return {"Expetion": f'Error al obtener Embeddig Database: {str(e)}'}
 
-    async def _convertMessageEmbedding(self, userMessage,nameCollection):
+    async def _responseEmbedding(self, userMessage, nameCollection):
         try:
             userMessageEmbedding = self._callEmbeding(promt=userMessage)
             Collection= self.ChromaClient.get_or_create_collection(name=nameCollection)
