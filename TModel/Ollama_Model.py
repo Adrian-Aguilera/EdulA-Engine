@@ -10,7 +10,9 @@ def enbedings():
         prompt='Hola mucho como estas?',
     )
     print(embedings)
-    
+
+def clientChromaIntern(path):
+    pass
 def rag_option():
     partes_exposicion_fisica = [
         "Adrián: Investigar los conceptos del tema, estudiarlos para explicarlos y agregarlos a la presentación: -Que es un vector? -cuales son las componentes de un vector? -que representa un vector en el plano (x,y) -que es la cinemática? -Como se aplica la cinemática en los vectores -que es el en movimiento en dos dimensiones? -que es el movimiento en tres dimensiones? -qué es el movimiento en tres dimensiones? -cómo se aplican los vectores en dos dimensiones y que representan? -cómo se aplican los vectores en tres dimensiones y que representan?",
@@ -19,16 +21,17 @@ def rag_option():
         "Didier: investigar ejercicio de vectores en tres dimensiones y agregarlo a la presentación de la exposición"
     ]
 
+    configuracion = Settings(is_persistent=True, persist_directory="./DB/Chroma_storageDB")
     # Configurar Chroma para usar almacenamiento persistente
-    settings = Settings(persist_directory="./DB/Chroma_storageDB")
-    client = chromadb.Client(settings=settings)
-    collection = client.create_collection(name="db_embeding")
+    client = chromadb.Client(settings=configuracion)
+    #collection = client.create_collection(name="db_embeding")
+    collectionInter = client.get_or_create_collection(name="db_embeding")
 
     # store each document in a vector embedding database
     for i, d in enumerate(partes_exposicion_fisica):
         response = ollama.embeddings(model="mxbai-embed-large", prompt=d)
         embedding = response["embedding"]
-        collection.add(
+        collectionInter.add(
             ids=[str(i)],
             embeddings=[embedding],
             documents=[d]
@@ -40,7 +43,7 @@ def rag_option():
         prompt=prompt,
         model="mxbai-embed-large"
     )
-    results = collection.query(
+    results = collectionInter.query(
         query_embeddings=[response["embedding"]],
         n_results=1
     )
