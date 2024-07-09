@@ -15,24 +15,25 @@ from rest_framework.views import APIView
 #cargando variables de entorno
 load_dotenv()
 
-def main_engine(type_engine, message):
+async def main_engine(type_engine, message):
     if not type_engine:
         return "Faltan parámetros para inicializar el motor"
 
-    #engine_av = asistente virtual por alumno
-    #engine_general = chat para todo los usuarios
+    # engine_av = asistente virtual por alumno
+    # engine_general = chat para todos los usuarios
     engine_av = type_engine.get("EngineAV", None)
     engine_general = type_engine.get("EngineGeneral", None)
 
     if engine_av is not None:
         engine = ControllerEduIA(EngineAV=engine_av)
-        return async_to_sync(engine.main_engine)(message)
+        return await engine.main_engine(message)
 
     elif engine_general is not None:
         engine = ControllerEduIA(EngineChat=engine_general)
-        return async_to_sync(engine.main_engine)(message)
+        return await engine.main_engine(message)
     else:
         return "Tipo de motor no definido correctamente"
+
 
 
 class MainOption(APIView):
