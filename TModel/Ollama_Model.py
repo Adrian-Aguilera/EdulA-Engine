@@ -25,7 +25,7 @@ def rag_option():
     # Configurar Chroma para usar almacenamiento persistente
     client = chromadb.Client(settings=configuracion)
     #collection = client.create_collection(name="db_embeding")
-    collectionInter = client.get_or_create_collection(name="db_embeding")
+    collectionInter = client.get_or_create_collection(name="Tcollection")
 
     # store each document in a vector embedding database
     for i, d in enumerate(partes_exposicion_fisica):
