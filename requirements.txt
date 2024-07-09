@@ -14,12 +14,4 @@ django-sslserver
 drf-yasg
 djongo
 chromadb
-llama-index==0.9.1
-urllib3==1.26.18
-langchain
-langchain-community
-langchain-core
-langchain-openai
 ollama
-gpt4all
-langchainhub
