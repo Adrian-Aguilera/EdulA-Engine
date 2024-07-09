@@ -12,10 +12,12 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
+import logging
+logger = logging.getLogger('EduApp')
 #cargando variables de entorno
 load_dotenv()
 
-async def main_engine(type_engine, message):
+def main_engine(type_engine, message):
     if not type_engine:
         return "Faltan parámetros para inicializar el motor"
 
@@ -26,11 +28,15 @@ async def main_engine(type_engine, message):
 
     if engine_av is not None:
         engine = ControllerEduIA(EngineAV=engine_av)
-        return await engine.main_engine(message)
+        mensaje = async_to_sync(engine.main_engine)(message)
+        logger.error(f"Error in get_general_chat: {mensaje}")
+        return mensaje
 
     elif engine_general is not None:
         engine = ControllerEduIA(EngineChat=engine_general)
-        return await engine.main_engine(message)
+        mensaje = async_to_sync(engine.main_engine)(message)
+        logger.error(f"Error in get_general_chat: {mensaje}")
+        return  mensaje
     else:
         return "Tipo de motor no definido correctamente"
 

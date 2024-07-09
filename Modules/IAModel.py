@@ -26,34 +26,34 @@ class LModel:
         return message_user
 
     # Función principal
-    async def responseGeneral(self, message_user):
+    def responseGeneral(self, message_user):
         try:
             nameCollection = 'Tcollection'
-            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
-            response = await self._callGenerate(message_user, contextEmbedding=userEmbeddings)
+            userEmbeddings =  self._responseEmbedding(message_user, nameCollection=nameCollection)
+            response =  self._callGenerate(message_user, contextEmbedding=userEmbeddings)
             if response:
                 return {"message": response}
         except Exception as e:
             return ({"error": f"Error al conectar con el motor: {str(e)}"})
 
-    async def _callGenerate(self, message_user, contextEmbedding):
+    def _callGenerate(self, message_user, contextEmbedding):
         output = []
         try:
-            async for fragmento in self.ollamaClient.generate(
+            responseCall = self.ollamaClient.generate(
                 model=self.modelo,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=True,
-            ):
-                if fragmento['done']:
-                    break
+            )
+            for fragmento in responseCall:
                 output.append(fragmento["response"])
+
             return ''.join(output)
         except Exception as e:
             return ({"error": f"Error en la generación de respuesta: {str(e)}"})
 
-    async def _callEmbedding(self, prompt):
+    def _callEmbedding(self, prompt):
         try:
-            responseEmbeddings = await self.ollamaClientembeddings(
+            responseEmbeddings = self.ollamaClient.embeddings(
                 prompt=prompt,
                 model=self.modelEmbedding
             )
@@ -61,15 +61,13 @@ class LModel:
         except Exception as e:
             return ({"error": f"Error en la obtención de embeddings: {str(e)}"})
 
-    async def _embeddingsDataBase(self, nameCollection, dataContext):
+    def _embeddingsDataBase(self, nameCollection, dataContext):
         try:
             operacion = True
             Collection= self.ChromaClient.get_or_create_collection(name=nameCollection)
             for i, d in enumerate(dataContext):
                 try:
-                    response = await self._callEmbedding(prompt=d)
-                    if 'embedding' not in response:
-                        raise ValueError("Respuesta de embedding inválida")
+                    response =  self._callEmbedding(prompt=d)
                     embedding = response["embedding"]
                     Collection.add(
                         ids=[str(i)],
@@ -83,11 +81,9 @@ class LModel:
         except Exception as e:
             return ({"Exception": f"Error al obtener Embedding Database: {str(e)}"})
 
-    async def _responseEmbedding(self, userMessage, nameCollection):
+    def _responseEmbedding(self, userMessage, nameCollection):
         try:
-            userMessageEmbedding = await self._callEmbedding(prompt=userMessage)
-            if 'embedding' not in userMessageEmbedding:
-                raise ValueError("Respuesta de embedding inválida")
+            userMessageEmbedding =  self._callEmbedding(prompt=userMessage)
             Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
             results = Collection.query(
                 query_embeddings=[userMessageEmbedding["embedding"]],

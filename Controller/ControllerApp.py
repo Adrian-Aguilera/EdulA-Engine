@@ -14,16 +14,16 @@ class ControllerEduIA:
         edula_av = 'modulo para asistente virtual'
         return edula_av
 
-    async def edulaGeneral(self, message):
+    def edulaGeneral(self, message):
         # Cargar clase con parámetros necesarios
         Lmodel = LModel()
-        fun_model = await Lmodel.responseGeneral(message_user=message)
+        fun_model = Lmodel.responseGeneral(message_user=message)
         return fun_model
 
-    async def main_engine(self, message):
+    def main_engine(self, message):
         if self.EngineAV:
-            return await self.edulaAV(message)
+            return  self.edulaAV(message)
         elif self.EngineChat:
-            return await self.edulaGeneral(message)
+            return  self.edulaGeneral(message)
         else:
             return "Motor no encontrado"
