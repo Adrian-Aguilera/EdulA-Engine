@@ -12,7 +12,7 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
-
+import json
 #ollama module
 from ollama import Client
 from dotenv import load_dotenv
@@ -38,7 +38,7 @@ class CustomModel(APIView):
                 return Response({'Error': f'{str(e)}'})
         else:
             return Response({'ErrorMethod': 'Metodo no permitido'})
-    
+
     @api_view(['GET'])
     @permission_classes([IsAuthenticated])
     def showAllModel(request):
@@ -50,7 +50,7 @@ class CustomModel(APIView):
                 return Response({"Error": "Error al motrar modelos"})
         else:
             return Response({"Method": "Metodo no disponible"})
-    
+
     @api_view(['POST'])
     @permission_classes([IsAuthenticated])
     def searchModelCustom(request):
@@ -65,9 +65,26 @@ class CustomModel(APIView):
         
         else:
             return Response({"Method": "Metodo no disponible"})
-                
-        
-        
+    
+    @api_view(['POST'])
+    def ConnectOllama(request):
+        if request.method == 'POST':
+            dataRequest = request.data
+            modelo = dataRequest["modelo"]
+            role = dataRequest["mensaje"]["role"]
+            content = dataRequest["mensaje"]["content"]
+            create =  ollamaClient.chat(
+                model=modelo,
+                messages=[
+                {
+                    'role': f'{role}',
+                    'content': f'{content}',
+                },
+            ])
+            return Response(create)
+        else:
+            return Response({"Method": "Metodo no disponible"})
+
 def callCreateModel(modelName,modelfile):
     try:
         ollmaResponse = ollamaClient.create(model=modelName, modelfile=modelfile)

@@ -4,4 +4,5 @@ urlpatterns = [
     path('Model/create', CustomModel.createModelCustom, name="modelCustom"),
     path('Model/show', CustomModel.showAllModel, name="show all model"),
     path('Model/SearchAvailable', CustomModel.searchModelCustom, name="Model Available"),
+    path('Model/ollmaClient', CustomModel.ConnectOllama, name='ollamaClient')
 ]
