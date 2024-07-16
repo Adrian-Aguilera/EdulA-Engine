@@ -29,27 +29,22 @@ class GeneralModel:
     async def responseGeneral(self, message_user):
         try:
             nameCollection = "Tcollection"
-            userEmbeddings = await self._responseEmbedding(
-                message_user, nameCollection=nameCollection
-            )
-            responseGenerate = await self._callGenerate(
-                message_user=message_user, contextEmbedding=userEmbeddings
-            )
-            print(responseGenerate)
-            return responseGenerate
+            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
+            #print('generate text: ',responseGenerate)
+            return ({'response': responseGenerate})
         except Exception as e:
             return {"error": f"Error al conectar con el motor: {str(e)}"}
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
-            responseCall = await self.ollamaClient.chat(
+            responseCall = await self.ollamaClient.generate(
                 model=self.MODELLM,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=False,
-                options={'num_ctx': 150}
             )
-            # print(responseCall["response"])
-            return {"message": f'{responseCall["response"]}'}
+            print(f'response call: {responseCall}')
+            return responseCall["response"]
         except Exception as e:
             return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
@@ -86,7 +81,7 @@ class GeneralModel:
                 query_embeddings=[userMessageEmbedding["embedding"]], n_results=1
             )
             respuesta = results["documents"][0][0]
-            print(respuesta)
+            #print(respuesta)
             return respuesta
         except Exception as e:
             return {"error": f"Error en la respuesta de embedding: {str(e)}"}
