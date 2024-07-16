@@ -30,19 +30,31 @@ class GeneralModel:
         try:
             nameCollection = "Tcollection"
             #userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
-            responseGenerate = await self._callGenerate(message_user=message_user)
+            responseGenerate = await self._callChatGenerate(message_user=message_user)
             #print('generate text: ',responseGenerate)
             return ({'response': responseGenerate})
         except Exception as e:
             return {"error": f"Error al conectar con el motor: {str(e)}"}
 
-    async def _callGenerate(self, message_user, contextEmbedding=None):
+    async def _callChatGenerate(self, message_user, contextEmbedding=None):
         try:
             responseCall = await self.ollamaClient.chat(
                 model=self.MODELLM,
                 messages=[{'role':'user','content':f'{message_user}'}],
                 stream=False,
                 options={'num_ctx': 150, 'temperature':0.5},
+            )
+            print(f'response call: {responseCall}')
+            return responseCall["response"]
+        except Exception as e:
+            return {"error": f"Error en la generación de respuesta: {str(e)}"}
+
+    async def _callGenerate(self, message_user, contextEmbedding=None):
+        try:
+            responseCall = await self.ollamaClient.generate(
+                model=self.MODELLM,
+                prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
+                stream=False,
             )
             print(f'response call: {responseCall}')
             return responseCall["response"]
