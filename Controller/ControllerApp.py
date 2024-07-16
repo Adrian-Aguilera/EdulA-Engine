@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 
 # Cargando variables de entorno
-load_dotenv()
+load_dotenv(override=True)
 
 class ControllerEduIA:
     def __init__(self, EngineAV=None, EngineChat=None):

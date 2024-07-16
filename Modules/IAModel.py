@@ -6,7 +6,7 @@ import chromadb
 from chromadb.config import Settings
 from asgiref.sync import async_to_sync
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 class GeneralModel:
@@ -23,18 +23,31 @@ class GeneralModel:
                 persist_directory=self.persist_directory,
             )
         )
-        self.ollamaClient = ollama.AsyncClient(host=os.environ.get("OLLAMACLIENT"))
+        self.ollamaClient = ollama.AsyncClient(host='127.0.0.1:11434')
 
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
             nameCollection = "Tcollection"
-            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
-            responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
+            #userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            responseGenerate = await self._callChatGenerate(message_user=message_user)
             #print('generate text: ',responseGenerate)
             return ({'response': responseGenerate})
         except Exception as e:
             return {"error": f"Error al conectar con el motor: {str(e)}"}
+
+    async def _callChatGenerate(self, message_user, contextEmbedding=None):
+        try:
+            responseCall = await self.ollamaClient.chat(
+                model=self.MODELLM,
+                messages=[{'role':'user','content':f'{message_user}'}],
+                stream=False,
+                options={'num_ctx': 150, 'temperature':0.5},
+            )
+            print(f'response call: {responseCall}')
+            return responseCall["message"]['content']
+        except Exception as e:
+            return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
