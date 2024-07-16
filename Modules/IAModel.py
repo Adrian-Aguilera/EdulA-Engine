@@ -24,9 +24,6 @@ class GeneralModel:
         )
         self.ollamaClient = ollama.AsyncClient(host=os.environ.get('OLLAMACLIENT'))
 
-    async def av_chat(self, mode, system_content, message_user):
-        return message_user
-
     #funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
