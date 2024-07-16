@@ -8,7 +8,7 @@ from asgiref.sync import async_to_sync
 
 load_dotenv()
 
-class LModel:
+class GeneralModel:
     def __init__(self, api_key=None, model_point=None):
         self.modelo = os.environ.get("MODELLM")
         self.modelEmbedding = os.environ.get("MODELEMBEDDING")

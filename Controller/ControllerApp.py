@@ -1,4 +1,4 @@
-from Modules.IAModel import LModel
+from Modules.IAModel import GeneralModel
 from dotenv import load_dotenv
 import os
 
@@ -16,8 +16,8 @@ class ControllerEduIA:
 
     async def edulaGeneral(self, message):
         # Cargar clase con parámetros necesarios
-        Lmodel = LModel()
-        fun_model = await Lmodel.responseGeneral(message_user=message)
+        modelGeneral = GeneralModel()
+        fun_model = await modelGeneral.responseGeneral(message_user=message)
         return fun_model
 
     async def main_engine(self, message):
