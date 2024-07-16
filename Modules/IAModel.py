@@ -22,18 +22,19 @@ class LModel:
                 persist_directory=self.persist_directory
             )
         )
-        self.ollamaClient = ollama.AsyncClient(host="127.0.0.1:11434")
+        self.ollamaClient = ollama.AsyncClient(host=os.environ.get('OLLAMACLIENT'))
 
     async def av_chat(self, mode, system_content, message_user):
         return message_user
 
+    #funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
             nameCollection = 'Tcollection'
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             print(responseGenerate)
-            return {'message': f'{responseGenerate}'}
+            return responseGenerate
         except Exception as e:
             return {"error": f"Error al conectar con el motor: {str(e)}"}
 
