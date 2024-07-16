@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 import logging
 
 logger = logging.getLogger('EduApp')
-load_dotenv()
+load_dotenv(override=True)
 
 # Hacer que main_engine sea síncrono, llamando async_to_sync dentro de él
 def main_engine(type_engine, message):

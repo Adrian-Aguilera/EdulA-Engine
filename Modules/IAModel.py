@@ -6,7 +6,7 @@ import chromadb
 from chromadb.config import Settings
 from asgiref.sync import async_to_sync
 
-load_dotenv()
+load_dotenv(override=True)
 
 
 class GeneralModel:
