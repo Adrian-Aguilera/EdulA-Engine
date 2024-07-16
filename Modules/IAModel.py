@@ -45,7 +45,7 @@ class GeneralModel:
                 options={'num_ctx': 150, 'temperature':0.5},
             )
             print(f'response call: {responseCall}')
-            return responseCall["response"]
+            return responseCall["message"]['content']
         except Exception as e:
             return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
