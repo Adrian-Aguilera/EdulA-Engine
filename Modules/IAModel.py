@@ -23,14 +23,14 @@ class GeneralModel:
                 persist_directory=self.persist_directory,
             )
         )
-        self.ollamaClient = ollama.AsyncClient(host=os.environ.get("OLLAMACLIENT"))
+        self.ollamaClient = ollama.AsyncClient(host='127.0.0.1:11434')
 
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
             nameCollection = "Tcollection"
-            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
-            responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
+            #userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            responseGenerate = await self._callGenerate(message_user=message_user)
             #print('generate text: ',responseGenerate)
             return ({'response': responseGenerate})
         except Exception as e:
@@ -38,10 +38,11 @@ class GeneralModel:
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
-            responseCall = await self.ollamaClient.generate(
+            responseCall = await self.ollamaClient.chat(
                 model=self.MODELLM,
-                prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
+                messages=[{'role':'user','content':f'{message_user}'}],
                 stream=False,
+                options={'num_ctx': 150, 'temperature':0.5},
             )
             print(f'response call: {responseCall}')
             return responseCall["response"]
