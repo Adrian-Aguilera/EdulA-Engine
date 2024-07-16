@@ -1,11 +1,9 @@
-# Create your views here.
 from django.shortcuts import render
 from Modules.IAModel import *
 from Controller.ControllerApp import *
 from dotenv import load_dotenv
-from asgiref.sync import async_to_sync
-
-#importacion de django-rest.
+from asgiref.sync import sync_to_async
+from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -13,16 +11,15 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
 import logging
+
 logger = logging.getLogger('EduApp')
-#cargando variables de entorno
 load_dotenv()
 
+# Hacer que main_engine sea síncrono, llamando async_to_sync dentro de él
 def main_engine(type_engine, message):
     if not type_engine:
         return "Faltan parámetros para inicializar el motor"
 
-    # engine_av = asistente virtual por alumno
-    # engine_general = chat para todos los usuarios
     engine_av = type_engine.get("EngineAV", None)
     engine_general = type_engine.get("EngineGeneral", None)
 
@@ -36,14 +33,11 @@ def main_engine(type_engine, message):
         engine = ControllerEduIA(EngineChat=engine_general)
         mensaje = async_to_sync(engine.main_engine)(message)
         logger.error(f"Error in get_general_chat: {mensaje}")
-        return  mensaje
+        return mensaje
     else:
         return "Tipo de motor no definido correctamente"
 
-
-
 class MainOption(APIView):
-#parametros para el swagger
     @swagger_auto_schema(
         method='post',
         request_body=openapi.Schema(
@@ -71,8 +65,8 @@ class MainOption(APIView):
                 type_engine_data = data_requests.get('type_engine')
                 message = data_requests.get('mesage', '')
                 if type_engine_data:
-                    engine = async_to_sync(main_engine(type_engine_data, message))
-                    return Response({"data": engine})
+                    engine = main_engine(type_engine_data, message)
+                    return JsonResponse({"data": engine})
                 else:
                     return Response({"error": "Error engine activate"})
 
@@ -110,21 +104,15 @@ class MainOption(APIView):
     )
     @api_view(['POST'])
     @permission_classes([IsAuthenticated])
-    def get_response_AV(requests):
-        if requests.method == "POST":
+    def get_response_AV(request):
+        if request.method == "POST":
             try:
-                data_response = unpack_json(data_input=requests)
+                data_response = unpack_json(data_input=request)
                 if not data_response:
                     return Response({"Fail": "Json invalido"})
                 else:
                     id_users, type_engine, id_message, user_message = data_response
-                    
-                    #la informacion de estas variables viene de la db  y se retorna al front
-                    """
-                        history_system,
-                        history_user
-                    """
-                    #llamada a las funciones
+
                     engine = main_engine(type_engine, user_message)
                     return Response({"data": f"{engine}"})
             except Exception as e:
@@ -132,18 +120,13 @@ class MainOption(APIView):
         else:
             return Response({"error": "metodo no disponible"})
 
-#desenpaquetar json
 def unpack_json(data_input):
     try:
         data_requests = data_input.data
-        id_users= data_requests.get("id_users")
+        id_users = data_requests.get("id_users")
         type_engine = data_requests.get("type_engine")
         id_message = data_requests.get("id_message")
         user_message = data_requests.get("user_message")
-        """
-        history_system = data_requests.get("history_chat").get("system_response")
-        history_user = data_requests.get("history_chat").get("user_response")
-        """ 
         return id_users, type_engine, id_message, user_message
     except TypeError:
         return None

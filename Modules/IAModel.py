@@ -4,8 +4,10 @@ from dotenv import load_dotenv
 import os
 import chromadb
 from chromadb.config import Settings
+from asgiref.sync import async_to_sync
 
 load_dotenv()
+
 class LModel:
     def __init__(self, api_key=None, model_point=None):
         self.modelo = os.environ.get("MODELLM")
@@ -25,49 +27,45 @@ class LModel:
     async def av_chat(self, mode, system_content, message_user):
         return message_user
 
-    # Función principal
-    def responseGeneral(self, message_user):
+    async def responseGeneral(self, message_user):
         try:
             nameCollection = 'Tcollection'
-            userEmbeddings =  self._responseEmbedding(message_user, nameCollection=nameCollection)
-            response =  self._callGenerate(message_user, contextEmbedding=userEmbeddings)
-            if response:
-                return {"message": response}
+            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
+            print(responseGenerate)
+            return {'message': f'{responseGenerate}'}
         except Exception as e:
-            return ({"error": f"Error al conectar con el motor: {str(e)}"})
+            return {"error": f"Error al conectar con el motor: {str(e)}"}
 
-    def _callGenerate(self, message_user, contextEmbedding):
-        output = []
+    async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
-            responseCall = self.ollamaClient.generate(
+            responseCall = await self.ollamaClient.generate(
                 model=self.modelo,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
-                stream=True,
+                stream=False,
             )
-            for fragmento in responseCall:
-                output.append(fragmento["response"])
-
-            return ''.join(output)
+            #print(responseCall["response"])
+            return {'message': f'{responseCall["response"]}'}
         except Exception as e:
-            return ({"error": f"Error en la generación de respuesta: {str(e)}"})
+            return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
-    def _callEmbedding(self, prompt):
+    async def _callEmbedding(self, prompt):
         try:
-            responseEmbeddings = self.ollamaClient.embeddings(
+            responseEmbeddings = await self.ollamaClient.embeddings(
                 prompt=prompt,
                 model=self.modelEmbedding
             )
             return responseEmbeddings
         except Exception as e:
-            return ({"error": f"Error en la obtención de embeddings: {str(e)}"})
+            return {"error": f"Error en la obtención de embeddings: {str(e)}"}
 
     def _embeddingsDataBase(self, nameCollection, dataContext):
         try:
             operacion = True
-            Collection= self.ChromaClient.get_or_create_collection(name=nameCollection)
+            Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
             for i, d in enumerate(dataContext):
                 try:
-                    response =  self._callEmbedding(prompt=d)
+                    response = async_to_sync(self._callEmbedding)(prompt=d)
                     embedding = response["embedding"]
                     Collection.add(
                         ids=[str(i)],
@@ -79,17 +77,18 @@ class LModel:
                     operacion = False
             return operacion
         except Exception as e:
-            return ({"Exception": f"Error al obtener Embedding Database: {str(e)}"})
+            return {"Exception": f"Error al obtener Embedding Database: {str(e)}"}
 
-    def _responseEmbedding(self, userMessage, nameCollection):
+    async def _responseEmbedding(self, userMessage, nameCollection):
         try:
-            userMessageEmbedding =  self._callEmbedding(prompt=userMessage)
-            Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
+            userMessageEmbedding = await self._callEmbedding(prompt=userMessage)
+            Collection = self.ChromaClient.get_collection(name=nameCollection)
             results = Collection.query(
                 query_embeddings=[userMessageEmbedding["embedding"]],
                 n_results=1
             )
             respuesta = results['documents'][0][0]
+            print(respuesta)
             return respuesta
         except Exception as e:
-            return ({"error": f"Error en la respuesta de embedding: {str(e)}"})
+            return {"error": f"Error en la respuesta de embedding: {str(e)}"}
