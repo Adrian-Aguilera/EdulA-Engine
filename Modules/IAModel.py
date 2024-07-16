@@ -8,9 +8,10 @@ from asgiref.sync import async_to_sync
 
 load_dotenv()
 
+
 class GeneralModel:
     def __init__(self, api_key=None, model_point=None):
-        self.modelo = os.environ.get("MODELLM")
+        self.MODELLM = os.environ.get("MODELLM")
         self.modelEmbedding = os.environ.get("MODELEMBEDDING")
         self.is_persistent = os.environ.get("IS_PERSISTENT", "False").lower() in ("true", '1', 't')
         self.persist_directory = os.environ.get("PERSIST_DIRECTORY")
@@ -19,17 +20,21 @@ class GeneralModel:
         self.ChromaClient = chromadb.Client(
             settings=Settings(
                 is_persistent=self.is_persistent,
-                persist_directory=self.persist_directory
+                persist_directory=self.persist_directory,
             )
         )
-        self.ollamaClient = ollama.AsyncClient(host=os.environ.get('OLLAMACLIENT'))
+        self.ollamaClient = ollama.AsyncClient(host=os.environ.get("OLLAMACLIENT"))
 
-    #funcion principal de general response
+    # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
-            nameCollection = 'Tcollection'
-            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
-            responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
+            nameCollection = "Tcollection"
+            userEmbeddings = await self._responseEmbedding(
+                message_user, nameCollection=nameCollection
+            )
+            responseGenerate = await self._callGenerate(
+                message_user=message_user, contextEmbedding=userEmbeddings
+            )
             print(responseGenerate)
             return responseGenerate
         except Exception as e:
@@ -37,21 +42,21 @@ class GeneralModel:
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
-            responseCall = await self.ollamaClient.generate(
-                model=self.modelo,
+            responseCall = await self.ollamaClient.chat(
+                model=self.MODELLM,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=False,
+                options={'num_ctx': 150}
             )
-            #print(responseCall["response"])
-            return {'message': f'{responseCall["response"]}'}
+            # print(responseCall["response"])
+            return {"message": f'{responseCall["response"]}'}
         except Exception as e:
             return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
     async def _callEmbedding(self, prompt):
         try:
             responseEmbeddings = await self.ollamaClient.embeddings(
-                prompt=prompt,
-                model=self.modelEmbedding
+                prompt=prompt, model=self.modelEmbedding
             )
             return responseEmbeddings
         except Exception as e:
@@ -65,11 +70,7 @@ class GeneralModel:
                 try:
                     response = async_to_sync(self._callEmbedding)(prompt=d)
                     embedding = response["embedding"]
-                    Collection.add(
-                        ids=[str(i)],
-                        embeddings=[embedding],
-                        documents=[d]
-                    )
+                    Collection.add(ids=[str(i)], embeddings=[embedding], documents=[d])
                 except Exception as e:
                     print(f"Error al agregar el documento {d}: {str(e)}")
                     operacion = False
@@ -82,10 +83,9 @@ class GeneralModel:
             userMessageEmbedding = await self._callEmbedding(prompt=userMessage)
             Collection = self.ChromaClient.get_collection(name=nameCollection)
             results = Collection.query(
-                query_embeddings=[userMessageEmbedding["embedding"]],
-                n_results=1
+                query_embeddings=[userMessageEmbedding["embedding"]], n_results=1
             )
-            respuesta = results['documents'][0][0]
+            respuesta = results["documents"][0][0]
             print(respuesta)
             return respuesta
         except Exception as e:
