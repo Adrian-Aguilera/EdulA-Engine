@@ -29,25 +29,13 @@ class GeneralModel:
     async def responseGeneral(self, message_user):
         try:
             nameCollection = "Tcollection"
-            #userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
-            responseGenerate = await self._callChatGenerate(message_user=message_user)
+            userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             #print('generate text: ',responseGenerate)
             return ({'response': responseGenerate})
         except Exception as e:
             return {"error": f"Error al conectar con el motor: {str(e)}"}
 
-    async def _callChatGenerate(self, message_user, contextEmbedding=None):
-        try:
-            responseCall = await self.ollamaClient.chat(
-                model=self.MODELLM,
-                messages=[{'role':'user','content':f'{message_user}'}],
-                stream=False,
-                options={'num_ctx': 150, 'temperature':0.5},
-            )
-            print(f'response call: {responseCall}')
-            return responseCall["message"]['content']
-        except Exception as e:
-            return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
@@ -58,6 +46,19 @@ class GeneralModel:
             )
             print(f'response call: {responseCall}')
             return responseCall["response"]
+        except Exception as e:
+            return {"error": f"Error en la generación de respuesta: {str(e)}"}
+
+    async def _callChatGenerate(self, message_user):
+        try:
+            responseCall = await self.ollamaClient.chat(
+                model=self.MODELLM,
+                messages=[{'role':'user','content':f'{message_user}'}],
+                stream=False,
+                options={'num_ctx': 150, 'temperature':0.5},
+            )
+            print(f'response call: {responseCall}')
+            return responseCall["message"]['content']
         except Exception as e:
             return {"error": f"Error en la generación de respuesta: {str(e)}"}
 
