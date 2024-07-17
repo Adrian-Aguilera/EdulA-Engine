@@ -16,7 +16,7 @@ import json
 #ollama module
 from ollama import Client
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(override=True)
 ollamaClient = Client(host=str(os.environ.get("OLLAMACLIENT")))
 class CustomModel(APIView):
     #enp para crear un modelCustom
@@ -62,10 +62,9 @@ class CustomModel(APIView):
                 return Response({"Models": availableModel})
             else:
                 return Response({"Models": "No se ha encontrado el modelo"})
-        
         else:
             return Response({"Method": "Metodo no disponible"})
-    
+
     @api_view(['POST'])
     def ConnectOllama(request):
         if request.method == 'POST':
@@ -94,4 +93,3 @@ def callCreateModel(modelName,modelfile):
             return {"error": "error al crear modelo"}
     except Exception as e:
         return {"FatalError": f"Error al conectar ollma {str(e)}"}
-            
