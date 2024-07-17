@@ -5,6 +5,7 @@ import os
 import chromadb
 from chromadb.config import Settings
 from asgiref.sync import async_to_sync
+from EduApp.models import configChromaGeneral
 
 load_dotenv(override=True)
 
@@ -28,7 +29,10 @@ class GeneralModel:
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
-            nameCollection = "Tcollection"
+            #nameCollection = "Tcollection"
+            objChromaGeneral = configChromaGeneral()
+            nameCollection = objChromaGeneral.objects.all().first()
+            print(nameCollection)
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             #print('generate text: ',responseGenerate)
@@ -43,6 +47,7 @@ class GeneralModel:
                 model=self.MODELLM,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=False,
+                options={'num_ctx': 150, 'temperature':0.5},
             )
             print(f'response call: {responseCall}')
             return responseCall["response"]
