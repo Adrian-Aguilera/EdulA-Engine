@@ -29,13 +29,12 @@ class GeneralModel:
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
-            #nameCollection = "Tcollection"
-            objChromaGeneral = configChromaGeneral()
-            nameCollection = objChromaGeneral.objects.all().first()
+            #nameCollection = "Tcollection" intancia[0].nameCollection
+            intancia = configChromaGeneral().objects.all()
+            nameCollection = configChromaGeneral().objects.all()[0].nameCollection
             print(nameCollection)
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
-            #print('generate text: ',responseGenerate)
             return ({'response': responseGenerate})
         except Exception as e:
             return {"error": f"Error al conectar con el motor: {str(e)}"}
