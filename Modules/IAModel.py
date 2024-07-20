@@ -37,7 +37,7 @@ class GeneralModel:
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             return ({'response': responseGenerate})
         except Exception as e:
-            return {"error": f"Error al conectar con el motor: {str(e)}"}
+            return {"error": f"{str(e)}"}
 
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
