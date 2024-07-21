@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import chromadb
 from chromadb.config import Settings
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
 from EduApp.models import configChromaGeneral
 
 load_dotenv(override=True)
@@ -29,10 +29,9 @@ class GeneralModel:
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
-            #nameCollection = "Tcollection" intancia[0].nameCollection
-            intancia = configChromaGeneral().objects.all()
-            nameCollection = configChromaGeneral().objects.all()[0].nameCollection
-            print(nameCollection)
+            instancia = await sync_to_async(list)(configChromaGeneral.objects.all())
+            #print(instancia[0].nameCollection)
+            nameCollection = instancia[0].nameCollection
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             return ({'response': responseGenerate})
