@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 import os
 import chromadb
 from chromadb.config import Settings
-from asgiref.sync import async_to_sync
+from asgiref.sync import async_to_sync, sync_to_async
+from EduApp.models import configChromaGeneral
 
 load_dotenv(override=True)
 
@@ -28,13 +29,14 @@ class GeneralModel:
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
-            nameCollection = "Tcollection"
+            instancia = await sync_to_async(list)(configChromaGeneral.objects.all())
+            #print(instancia[0].nameCollection)
+            nameCollection = instancia[0].nameCollection
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
-            #print('generate text: ',responseGenerate)
             return ({'response': responseGenerate})
         except Exception as e:
-            return {"error": f"Error al conectar con el motor: {str(e)}"}
+            return {"error": f"{str(e)}"}
 
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
@@ -43,6 +45,7 @@ class GeneralModel:
                 model=self.MODELLM,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=False,
+                options={'num_ctx': 150, 'temperature':0.5},
             )
             print(f'response call: {responseCall}')
             return responseCall["response"]

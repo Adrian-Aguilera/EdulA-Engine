@@ -36,6 +36,8 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+#no subir migraciones
+migrations/
 # Unit test / coverage reports
 htmlcov/
 .tox/

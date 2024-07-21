@@ -7,11 +7,13 @@ djangorestframework
 markdown
 django-filter
 djangorestframework-simplejwt
-djangorestframework 
-simplejwt 
+djangorestframework
+simplejwt
 django-cors-headers
 django-sslserver
 drf-yasg
 djongo
 chromadb
 ollama
+django-admin-interface
+django-colorfield
