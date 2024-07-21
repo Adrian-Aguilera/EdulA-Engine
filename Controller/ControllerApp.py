@@ -1,4 +1,5 @@
 from Modules.IAModel import GeneralModel
+from Modules.dbModel import ModelDB
 from dotenv import load_dotenv
 import os
 
@@ -27,3 +28,9 @@ class ControllerEduIA:
             return await self.edulaGeneral(message)
         else:
             return "Motor no encontrado"
+
+class ControllerDataBase:
+    def createDatabase(self, nameCollection, dataContent):
+        objCollectionDB = ModelDB
+        createCollection = objCollectionDB.embeddingsDataBase(nameCollection=nameCollection, dataContext=dataContent)
+        return createCollection

@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import MainOption
+from .views import GeneralEdula, AVEdula
 
 urlpatterns = [
-    path("general/chat", MainOption.get_general_chat, name="chat general"),
-    path("Asistente/chat", MainOption.get_response_AV, name="chat av"),
+    path("general/chat", GeneralEdula.get_general_chat, name="chat general"),
+    path("asistente/chat", AVEdula.get_response_AV, name="chat av"),
 ]

@@ -37,7 +37,7 @@ def main_engine(type_engine, message):
     else:
         return "Tipo de motor no definido correctamente"
 
-class MainOption(APIView):
+class GeneralEdula(APIView):
     @swagger_auto_schema(
         method='post',
         request_body=openapi.Schema(
@@ -75,7 +75,7 @@ class MainOption(APIView):
         else:
             return Response({"error": "metodo no disponible"})
 
-
+class AVEdula(APIView):
     @swagger_auto_schema(
         method='post',
         request_body=openapi.Schema(
@@ -107,26 +107,18 @@ class MainOption(APIView):
     def get_response_AV(request):
         if request.method == "POST":
             try:
-                data_response = unpack_json(data_input=request)
-                if not data_response:
-                    return Response({"Fail": "Json invalido"})
-                else:
-                    id_users, type_engine, id_message, user_message = data_response
-
-                    engine = main_engine(type_engine, user_message)
-                    return Response({"data": f"{engine}"})
+                data_requests = request.data
+                id_users = data_requests.get("id_users")
+                type_engine = data_requests.get("type_engine")
+                id_message = data_requests.get("id_message")
+                user_message = data_requests.get("user_message")
+                engine = main_engine(type_engine, user_message)
+                return JsonResponse({"data": engine})
             except Exception as e:
                 return Response({"Error": "Fail get data"})
         else:
             return Response({"error": "metodo no disponible"})
 
-def unpack_json(data_input):
-    try:
-        data_requests = data_input.data
-        id_users = data_requests.get("id_users")
-        type_engine = data_requests.get("type_engine")
-        id_message = data_requests.get("id_message")
-        user_message = data_requests.get("user_message")
-        return id_users, type_engine, id_message, user_message
-    except TypeError:
-        return None
+#clase que se encargara de gestionar la parte de la informacion de los modelos
+class DataToChromaDB(APIView):
+    pass

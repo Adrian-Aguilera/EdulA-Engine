@@ -45,7 +45,7 @@ class GeneralModel:
                 model=self.MODELLM,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=False,
-                options={'num_ctx': 150, 'temperature':0.5},
+                options={'num_ctx': 150},
             )
             print(f'response call: {responseCall}')
             return responseCall["response"]
@@ -73,22 +73,6 @@ class GeneralModel:
             return responseEmbeddings
         except Exception as e:
             return {"error": f"Error en la obtención de embeddings: {str(e)}"}
-
-    def _embeddingsDataBase(self, nameCollection, dataContext):
-        try:
-            operacion = True
-            Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
-            for i, d in enumerate(dataContext):
-                try:
-                    response = async_to_sync(self._callEmbedding)(prompt=d)
-                    embedding = response["embedding"]
-                    Collection.add(ids=[str(i)], embeddings=[embedding], documents=[d])
-                except Exception as e:
-                    print(f"Error al agregar el documento {d}: {str(e)}")
-                    operacion = False
-            return operacion
-        except Exception as e:
-            return {"Exception": f"Error al obtener Embedding Database: {str(e)}"}
 
     async def _responseEmbedding(self, userMessage, nameCollection):
         try:
