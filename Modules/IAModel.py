@@ -45,7 +45,7 @@ class GeneralModel:
                 model=self.MODELLM,
                 prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
                 stream=False,
-                options={'num_ctx': 150},
+                options={'num_ctx': 150, 'temperature':0.5},
             )
            #print(f'response call: {responseCall}')
             return responseCall["response"]
@@ -82,7 +82,7 @@ class GeneralModel:
                 query_embeddings=[userMessageEmbedding["embedding"]], n_results=1
             )
             respuesta = results["documents"][0][0]
-            #print(respuesta)
+            #print('respuesta embeding: ',respuesta)
             return respuesta
         except Exception as e:
             return {"error": f"Error en la respuesta de embedding: {str(e)}"}
