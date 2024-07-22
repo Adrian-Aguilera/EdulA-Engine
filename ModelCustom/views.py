@@ -5,6 +5,7 @@ from Controller.ControllerApp import *
 from dotenv import load_dotenv
 from asgiref.sync import async_to_sync
 import subprocess
+from django.http import JsonResponse
 #importacion de django-rest.
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
@@ -81,6 +82,17 @@ class CustomModel(APIView):
                 },
             ])
             return Response(create)
+        else:
+            return Response({"Method": "Metodo no disponible"})
+
+    @api_view(['GET'])
+    def modelUsed(request):
+        if request.method == 'GET':
+            try:
+                modelUsed = os.environ.get('MODELLM')
+                return JsonResponse({'data': modelUsed})
+            except Exception as e:
+                return JsonResponse({'Exception error': str()})
         else:
             return Response({"Method": "Metodo no disponible"})
 
