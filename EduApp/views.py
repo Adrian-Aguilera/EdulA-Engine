@@ -132,7 +132,7 @@ class DataToChromaDB(APIView):
                 configInstance = configChromaGeneral.objects.all()
                 getNameCollection = configInstance[0].nameCollection
                 getDataContent = DataChromaGeneral.objects.all()[0].dataContent
-                print(f'data: {getDataContent}')
+                #print(f'data: {getDataContent}')
                 response = dbController.createDatabase(nameCollection=getNameCollection, dataContent=getDataContent)
                 return JsonResponse(response)
             except Exception as e:

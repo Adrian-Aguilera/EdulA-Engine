@@ -24,13 +24,13 @@ class ModelDB:
         try:
             generalObj = GeneralModel()
             operacion = True
-            print(f'dataEmbedings: {dataContext}')
+            filterData = dataContext.strip().split('\n\n')
             Collection = self.ChromaClient.create_collection(name=nameCollection)
-            for i, d in enumerate(dataContext):
+            for i, d in enumerate(filterData):
                 try:
                     response = async_to_sync(generalObj._callEmbedding)(prompt=d)
                     embedding = response["embedding"]
-                    Collection.add(ids=[str(i)], embeddings=[embedding], documents=[d])
+                    Collection.add(ids=[str(i)], embeddings=[embedding], documents=[d.strip()])
                 except Exception as e:
                     print(f"Error al agregar el documento {d}: {str(e)}")
                     operacion = False
