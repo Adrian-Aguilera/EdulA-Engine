@@ -23,7 +23,9 @@ Para poder instalar el proyecto, crearemos un .venv para instalar las dependenci
 
 ```bash
   python3 -m venv .venv
-  .venv\Scripts\activate
+```
+```bash
+.venv\Scripts\activate
 ```
 una vez instalado y corriendo la terminal del .venv, instalar las dependencias corriendo
 
