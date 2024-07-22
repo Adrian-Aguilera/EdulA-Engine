@@ -18,9 +18,9 @@ class configChromaAV(models.Model):
 
     #funcion para validar que solo se pueda ingresar una vez
     def save(self, *args, **kwargs):
-        if self.pk is None and configChromaGeneral.objects.exists():
+        if self.pk is None and configChromaAV.objects.exists():
             raise ValidationError('No puedes crear un nuevo registro de ConfigAV. Solo puedes modificar el existente.')
-        super(configChromaGeneral, self).save(*args, **kwargs)
+        super(configChromaAV, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.nameCollection
@@ -29,9 +29,9 @@ class DataChromaGeneral(models.Model):
     dataContent = models.TextField(help_text='datos que se usaran como contexto para General chat')
 
     def save(self, *args, **kwargs):
-        if self.pk is None and configChromaGeneral.objects.exists():
+        if self.pk is None and DataChromaGeneral.objects.exists():
             raise ValidationError('No puedes crear un nuevo campo campo para el contenido de chatGeneral')
-        super(configChromaGeneral, self).save(*args, **kwargs)
+        super(DataChromaGeneral, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.dataContent
