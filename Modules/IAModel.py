@@ -34,6 +34,7 @@ class GeneralModel:
             nameCollection = instancia[0].nameCollection
             print(nameCollection)
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
+            print('userEmbeddigs: ',userEmbeddings)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             return ({'response': responseGenerate})
         except Exception as e:
@@ -48,7 +49,7 @@ class GeneralModel:
                 stream=False,
                 options={'num_ctx': 150},
             )
-            print(f'response call: {responseCall}')
+           #print(f'response call: {responseCall}')
             return responseCall["response"]
         except Exception as e:
             return {"error": f"Error en la generación de respuesta: {str(e)}"}
