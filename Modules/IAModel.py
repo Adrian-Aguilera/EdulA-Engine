@@ -41,11 +41,11 @@ class GeneralModel:
 
     async def _callGenerate(self, message_user, contextEmbedding=None):
         try:
+            print(contextEmbedding)
             responseCall = await self.ollamaClient.generate(
                 model=self.MODELLM,
-                prompt=f"{self.systemContent}{contextEmbedding}. Responde a este mensaje: {message_user}",
-                stream=False,
-                options={'num_ctx': 150, 'temperature':0.5},
+                prompt=f"Usa esta informacion: {contextEmbedding}. Responde a este mensaje: {message_user}",
+                stream=False
             )
            #print(f'response call: {responseCall}')
             return responseCall["response"]
@@ -77,7 +77,7 @@ class GeneralModel:
     async def _responseEmbedding(self, userMessage, nameCollection):
         try:
             userMessageEmbedding = await self._callEmbedding(prompt=userMessage)
-            Collection = self.ChromaClient.get_collection(name=nameCollection)
+            Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
             results = Collection.query(
                 query_embeddings=[userMessageEmbedding["embedding"]], n_results=1
             )
