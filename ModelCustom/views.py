@@ -92,7 +92,7 @@ class CustomModel(APIView):
                 modelUsed = os.environ.get('MODELLM')
                 return JsonResponse({'data': modelUsed})
             except Exception as e:
-                return JsonResponse({'Exception error': str()})
+                return JsonResponse({'Exception error': str(e)})
         else:
             return Response({"Method": "Metodo no disponible"})
 
