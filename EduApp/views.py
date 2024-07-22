@@ -10,32 +10,34 @@ from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
+from .models import DataChromaGeneral, configChromaGeneral
 import logging
 
 logger = logging.getLogger('EduApp')
 load_dotenv(override=True)
 
-# Hacer que main_engine sea síncrono, llamando async_to_sync dentro de él
-def main_engine(type_engine, message):
-    if not type_engine:
-        return "Faltan parámetros para inicializar el motor"
+class ControllerInter():
+    # Hacer que main_engine sea síncrono, llamando async_to_sync dentro de él
+    def main_engine(type_engine, message):
+        if not type_engine:
+            return "Faltan parámetros para inicializar el motor"
 
-    engine_av = type_engine.get("EngineAV", None)
-    engine_general = type_engine.get("EngineGeneral", None)
+        engine_av = type_engine.get("EngineAV", None)
+        engine_general = type_engine.get("EngineGeneral", None)
 
-    if engine_av is not None:
-        engine = ControllerEduIA(EngineAV=engine_av)
-        mensaje = async_to_sync(engine.main_engine)(message)
-        logger.error(f"Error in get_general_chat: {mensaje}")
-        return mensaje
+        if engine_av is not None:
+            engine = ControllerEduIA(EngineAV=engine_av)
+            mensaje = async_to_sync(engine.main_engine)(message)
+            logger.error(f"Error in get_general_chat: {mensaje}")
+            return mensaje
 
-    elif engine_general is not None:
-        engine = ControllerEduIA(EngineChat=engine_general)
-        mensaje = async_to_sync(engine.main_engine)(message)
-        logger.error(f"Error in get_general_chat: {mensaje}")
-        return mensaje
-    else:
-        return "Tipo de motor no definido correctamente"
+        elif engine_general is not None:
+            engine = ControllerEduIA(EngineChat=engine_general)
+            mensaje = async_to_sync(engine.main_engine)(message)
+            logger.error(f"Error in get_general_chat: {mensaje}")
+            return mensaje
+        else:
+            return "Tipo de motor no definido correctamente"
 
 class GeneralEdula(APIView):
     @swagger_auto_schema(
@@ -65,7 +67,7 @@ class GeneralEdula(APIView):
                 type_engine_data = data_requests.get('type_engine')
                 message = data_requests.get('mesage', '')
                 if type_engine_data:
-                    engine = main_engine(type_engine_data, message)
+                    engine = ControllerInter.main_engine(type_engine_data, message)
                     return JsonResponse({"data": engine})
                 else:
                     return Response({"error": "Error engine activate"})
@@ -112,7 +114,7 @@ class AVEdula(APIView):
                 type_engine = data_requests.get("type_engine")
                 id_message = data_requests.get("id_message")
                 user_message = data_requests.get("user_message")
-                engine = main_engine(type_engine, user_message)
+                engine = ControllerInter.main_engine(type_engine, user_message)
                 return JsonResponse({"data": engine})
             except Exception as e:
                 return Response({"Error": "Fail get data"})
@@ -121,4 +123,19 @@ class AVEdula(APIView):
 
 #clase que se encargara de gestionar la parte de la informacion de los modelos
 class DataToChromaDB(APIView):
-    pass
+    @api_view(['GET'])
+    @permission_classes([IsAuthenticated])
+    def activateGeneralMode(request):
+        if request.method == "GET":
+            try:
+                dbController = ControllerDataBase()
+                configInstance = configChromaGeneral.objects.all()
+                getNameCollection = configInstance[0].nameCollection
+                getDataContent = DataChromaGeneral.objects.all()[0].dataContent
+                print(f'data: {getDataContent}')
+                response = dbController.createDatabase(nameCollection=getNameCollection, dataContent=getDataContent)
+                return JsonResponse(response)
+            except Exception as e:
+                return Response({"Error": f"{str(e)}"})
+        else:
+            return Response({"error": "metodo no disponible"})

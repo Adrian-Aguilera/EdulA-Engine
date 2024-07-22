@@ -22,11 +22,13 @@ class ModelDB:
 
     def embeddingsDataBase(self, nameCollection, dataContext):
         try:
+            generalObj = GeneralModel()
             operacion = True
-            Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
+            print(f'dataEmbedings: {dataContext}')
+            Collection = self.ChromaClient.create_collection(name=nameCollection)
             for i, d in enumerate(dataContext):
                 try:
-                    response = async_to_sync(GeneralModel._callEmbedding)(prompt=d)
+                    response = async_to_sync(generalObj._callEmbedding)(prompt=d)
                     embedding = response["embedding"]
                     Collection.add(ids=[str(i)], embeddings=[embedding], documents=[d])
                 except Exception as e:

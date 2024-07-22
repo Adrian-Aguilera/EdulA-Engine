@@ -32,6 +32,7 @@ class GeneralModel:
             instancia = await sync_to_async(list)(configChromaGeneral.objects.all())
             #print(instancia[0].nameCollection)
             nameCollection = instancia[0].nameCollection
+            print(nameCollection)
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
             return ({'response': responseGenerate})
