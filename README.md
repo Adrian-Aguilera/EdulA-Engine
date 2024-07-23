@@ -67,7 +67,7 @@ Crear usuario administrador
   python manage.py createsuperuser
 ```
 
-#Instalacion de los temas para el panel admin de django
+##Instalacion de los temas para el panel admin de django
 luego de hacer las migraciones instalar los temas de para django:
 
 ##### [Django](https://www.djangoproject.com/) theme (default):
