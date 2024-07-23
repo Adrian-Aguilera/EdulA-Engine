@@ -67,6 +67,7 @@ Crear usuario administrador
   python manage.py createsuperuser
 ```
 
+#Instalacion de los temas para el panel admin de django
 ## Json general chat:
 ```yaml
 {
