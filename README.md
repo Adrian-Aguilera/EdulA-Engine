@@ -33,20 +33,6 @@ una vez instalado y corriendo la terminal del .venv, instalar las dependencias c
   pip install -r requirements.txt
 ```
 
-## Deployment
-
-Ejecutar servidor local
-
-```bash
-  python manage.py runserver
-```
-
-Ejecutar servidor local  con certificado ssl (recomendado)
-
-```bash
-  python manage.py runsslserver
-```
-
 ## Informacion Adicional
 
 Crear una aplicacion con django
@@ -81,6 +67,20 @@ Run `python manage.py loaddata admin_interface_theme_foundation.json`
 
 ##### [U.S. Web Design Standards](https://standards.usa.gov/) theme:
 Run `python manage.py loaddata admin_interface_theme_uswds.json`
+
+## Deployment
+
+Ejecutar servidor local
+
+```bash
+  python manage.py runserver
+```
+
+Ejecutar servidor local  con certificado ssl (recomendado)
+
+```bash
+  python manage.py runsslserver
+```
 
 ## Json general chat:
 ```yaml
