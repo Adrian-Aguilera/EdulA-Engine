@@ -10,7 +10,7 @@ Clonar el repositorio
   git clone https://github.com/Adrian-Aguilera/EdulA-Engine.git
 ```
 
-Go to the project directory
+Go to the project directory 
 
 ```bash
   cd /EdulA-Engine
