@@ -4,7 +4,7 @@
 EdulA es un motor que permite procesar lenguaje natural para hacer distintas actividades educativas
 
 ## Ejecutar local
-
+ 
 Clonar el repositorio 
 ```bash
   git clone https://github.com/Adrian-Aguilera/EdulA-Engine.git
