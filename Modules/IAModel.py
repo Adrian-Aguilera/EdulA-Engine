@@ -11,7 +11,7 @@ load_dotenv(override=True)
 
 
 class GeneralModel:
-    def __init__(self, api_key=None, model_point=None):
+    def __init__(self):
         self.MODELLM = os.environ.get("MODELLM")
         self.modelEmbedding = os.environ.get("MODELEMBEDDING")
         self.is_persistent = os.environ.get("IS_PERSISTENT", "False").lower() in ("true", '1', 't')
@@ -34,7 +34,12 @@ class GeneralModel:
             nameCollection = instancia[0].nameCollection
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
             responseGenerate = await self._callGenerate(message_user=message_user, contextEmbedding=userEmbeddings)
-            return ({'response': responseGenerate})
+            if 'error' in userEmbeddings:
+                return ({'error': userEmbeddings['error']})
+            elif 'error' in responseGenerate:
+                return ({'error': responseGenerate['error']})
+            else:
+                return ({'response': responseGenerate})
         except Exception as e:
             return {"error": f"{str(e)}"}
 
