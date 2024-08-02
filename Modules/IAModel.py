@@ -82,7 +82,7 @@ class GeneralModel:
     async def _responseEmbedding(self, userMessage, nameCollection):
         try:
             userMessageEmbedding = await self._callEmbedding(prompt=userMessage)
-            Collection = self.ChromaClient.get_or_create_collection(name=nameCollection)
+            Collection = self.ChromaClient.get_collection(name=nameCollection)
             results = Collection.query(
                 query_embeddings=[userMessageEmbedding["embedding"]], n_results=1
             )

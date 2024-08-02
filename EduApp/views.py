@@ -65,7 +65,7 @@ class GeneralEdula(APIView):
             try:
                 data_requests = request.data
                 type_engine_data = data_requests.get('type_engine')
-                message = data_requests.get('mesage', '')
+                message = data_requests.get('mesage')
                 if type_engine_data:
                     engine = ControllerInter.main_engine(type_engine_data, message)
                     return JsonResponse({"data": engine})
