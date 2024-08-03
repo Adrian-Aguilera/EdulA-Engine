@@ -27,7 +27,6 @@ class configChromaAV(models.Model):
 
 class DataChromaGeneral(models.Model):
     dataContent = models.TextField(help_text='datos que se usaran como contexto para General chat')
-
     def save(self, *args, **kwargs):
         if self.pk is None and DataChromaGeneral.objects.exists():
             raise ValidationError('No puedes crear un nuevo campo campo para el contenido de chatGeneral')
@@ -35,3 +34,9 @@ class DataChromaGeneral(models.Model):
 
     def __str__(self):
         return self.dataContent
+
+class DataFileOptions(models.Model):
+    fileName = models.CharField(max_length=255, help_text="nombre del archivo...", default='')
+    filePDF = models.FileField(upload_to='EduApp/static/')
+    def __str__(self):
+        return self.fileName
