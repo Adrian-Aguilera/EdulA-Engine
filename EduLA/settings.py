@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'EduApp',
+    'EduGeneralApp',
     'EduAssistApp',
     'ModelCustom',
     'rest_framework',
@@ -79,7 +79,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'EduLA/templates'),
-            os.path.join(BASE_DIR, 'EduApp/templates'),
+            os.path.join(BASE_DIR, 'EduGeneralApp/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -168,7 +168,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'EduLA/static')
 
 #archivos estaticos por app
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'EduApp/static'),
+    os.path.join(BASE_DIR, 'EduGeneralApp/static'),
 ]
 
 """

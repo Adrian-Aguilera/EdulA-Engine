@@ -4,7 +4,7 @@ import os
 import chromadb
 from chromadb.config import Settings
 from asgiref.sync import async_to_sync, sync_to_async
-from EduApp.models import configChromaGeneral
+from EduGeneralApp.models import configChromaGeneral
 
 load_dotenv(override=True)
 
