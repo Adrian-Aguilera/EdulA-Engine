@@ -4,7 +4,7 @@ import chromadb
 import ollama
 from chromadb.config import Settings
 from dotenv import load_dotenv
-from Modules.IAModel import GeneralModel
+from Modules.GeneralModel import GeneralModel
 
 load_dotenv(override=True)
 class ModelDB:

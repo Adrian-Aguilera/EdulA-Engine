@@ -1,6 +1,6 @@
 # Create your views here.
 from django.shortcuts import render
-from Modules.IAModel import *
+from Modules.GeneralModel import *
 from Controller.ControllerApp import *
 from dotenv import load_dotenv
 from asgiref.sync import async_to_sync

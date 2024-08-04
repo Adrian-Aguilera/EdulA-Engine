@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from Modules.IAModel import *
+from Modules.GeneralModel import *
 from Controller.ControllerApp import *
 from dotenv import load_dotenv
 from asgiref.sync import sync_to_async
@@ -77,49 +77,6 @@ class GeneralEdula(APIView):
         else:
             return Response({"error": "metodo no disponible"})
 
-class AVEdula(APIView):
-    @swagger_auto_schema(
-        method='post',
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'id_users': openapi.Schema(type=openapi.TYPE_STRING),
-                'type_engine': openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'EngineAV': openapi.Schema(type=openapi.TYPE_BOOLEAN),
-                    },
-                    required=['EngineAV']
-                ),
-                'id_message': openapi.Schema(type=openapi.TYPE_STRING),
-                'user_message': openapi.Schema(type=openapi.TYPE_STRING),
-                'history_chat': openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'system_response': openapi.Schema(type=openapi.TYPE_STRING),
-                        'user_response': openapi.Schema(type=openapi.TYPE_STRING)
-                    }
-                ),
-            },
-            required=['id_users', 'type_engine', 'id_message', 'user_message']
-        )
-    )
-    @api_view(['POST'])
-    @permission_classes([IsAuthenticated])
-    def get_response_AV(request):
-        if request.method == "POST":
-            try:
-                data_requests = request.data
-                id_users = data_requests.get("id_users")
-                type_engine = data_requests.get("type_engine")
-                id_message = data_requests.get("id_message")
-                user_message = data_requests.get("user_message")
-                engine = ControllerInter.main_engine(type_engine, user_message)
-                return JsonResponse({"data": engine})
-            except Exception as e:
-                return Response({"Error": "Fail get data"})
-        else:
-            return Response({"error": "metodo no disponible"})
 
 #clase que se encargara de gestionar la parte de la informacion de los modelos
 class DataToChromaDB(APIView):

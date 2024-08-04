@@ -1,5 +1,5 @@
-from Modules.IAModel import GeneralModel
-from Modules.dbModel import ModelDB
+from Modules.GeneralModel import GeneralModel
+from Modules.ConfigDBModel import ModelDB
 from dotenv import load_dotenv
 import os
 

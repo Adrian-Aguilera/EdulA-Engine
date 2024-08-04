@@ -1,4 +1,3 @@
-from openai import OpenAI
 import ollama
 from dotenv import load_dotenv
 import os
