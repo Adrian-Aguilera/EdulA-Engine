@@ -45,12 +45,13 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('EduApp.urls')),
+    path('api/EduAssist/', include('EduAssist.urls')),
     path('LLMS/', include('ModelCustom.urls')),
-    
+
     #enlace para obtener tokens
     path('tokens/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('tokens/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
+
     #rutas de swagger:
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
