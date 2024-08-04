@@ -48,7 +48,7 @@ urlpatterns = [
     path('api/EduAssist/', include('EduAssistApp.urls')),
     path('LLMS/', include('ModelCustomApp.urls')),
 
-    #enlace para obtener tokens
+    #rutas para obtener tokens
     path('tokens/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('tokens/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 

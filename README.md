@@ -136,3 +136,6 @@ Abreviaturas de nombres de los distintos modulos:
 **EduApp:** Aplicacion principal de Django
 
 
+# Indicaciones Iniciales:
+Crear una carpeta llamada DB en la raiz del proyecto
+Crear una carpeta llamada static en EduGeneralApp
