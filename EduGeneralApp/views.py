@@ -22,16 +22,9 @@ class ControllerInter():
         if not type_engine:
             return "Faltan parámetros para inicializar el motor"
 
-        engine_av = type_engine.get("EngineAV", None)
         engine_general = type_engine.get("EngineGeneral", None)
 
-        if engine_av is not None:
-            engine = ControllerEduIA(EngineAV=engine_av)
-            mensaje = async_to_sync(engine.main_engine)(message)
-            logger.error(f"Error in get_general_chat: {mensaje}")
-            return mensaje
-
-        elif engine_general is not None:
+        if engine_general is not None:
             engine = ControllerEduIA(EngineChat=engine_general)
             mensaje = async_to_sync(engine.main_engine)(message)
             logger.error(f"Error in get_general_chat: {mensaje}")
