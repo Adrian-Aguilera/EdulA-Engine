@@ -11,7 +11,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.views import APIView
 from .models import DataChromaGeneral
-from EduGeneralApp.models import configChromaGeneral
+from EduGeneralApp.models import NameCollectionGeneral
 
 #clase que se encargara de gestionar la parte de la informacion de los modelos
 class DataToChromaDB(APIView):
@@ -21,7 +21,7 @@ class DataToChromaDB(APIView):
         if request.method == "GET":
             try:
                 dbController = ControllerDataBase()
-                configInstance = configChromaGeneral.objects.all()
+                configInstance = NameCollectionGeneral.objects.all()
                 getNameCollection = configInstance[0].nameCollection
                 getDataContent = DataChromaGeneral.objects.all()[0].dataContent
                 print(f'data: {getNameCollection}')

@@ -4,7 +4,7 @@ import os
 import chromadb
 from chromadb.config import Settings
 from asgiref.sync import async_to_sync, sync_to_async
-from EduGeneralApp.models import configChromaGeneral
+from EduGeneralApp.models import NameCollectionGeneral
 
 load_dotenv(override=True)
 
@@ -28,7 +28,7 @@ class GeneralModel:
     # funcion principal de general response
     async def responseGeneral(self, message_user):
         try:
-            instancia = await sync_to_async(list)(configChromaGeneral.objects.all())
+            instancia = await sync_to_async(list)(NameCollectionGeneral.objects.all())
             #print(instancia[0].nameCollection)
             nameCollection = instancia[0].nameCollection
             userEmbeddings = await self._responseEmbedding(message_user, nameCollection=nameCollection)
