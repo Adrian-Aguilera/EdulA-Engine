@@ -36,6 +36,8 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+#no subir migraciones
+migrations/
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -60,6 +62,10 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+
+#Chroma db
+DB/Chroma_storageDB/
+DB/Chroma_storageDB/**
 
 # Flask stuff:
 instance/

@@ -1,35 +1,42 @@
-from Modules.IAModel import *
+from Modules.GeneralModel import GeneralModel
+from Modules.ConfigDBModel import ModelDB
 from dotenv import load_dotenv
 import os
-#cargando variables de entorno
-load_dotenv()
+
+# Cargando variables de entorno
+load_dotenv(override=True)
+
 class ControllerEduIA:
-    
     def __init__(self, EngineAV=None, EngineChat=None):
-        self.EngineAV =EngineAV
+        self.EngineAV = EngineAV
         self.EngineChat = EngineChat
-        self.key = os.environ.get('API_KEY')
-        self.model_url = os.environ.get('MODEL_URL')
-        self.Model = os.environ.get('MODEL')
-        self.sys_content = os.environ.get('SYS_CONTENT')
-    
-    async def Edula_AV(self, message):
+
+    async def edulaAV(self, message):
         edula_av = 'modulo para asistente virtual'
         return edula_av
-    
-    async def Edula_General(self, message):
+
+    async def edulaGeneral(self, message):
         # Cargar clase con parámetros necesarios
-        Lmodel = LModel(api_key=self.key, model_point=self.model_url)
-        
-        fun_model = await Lmodel.response_general(model=self.Model, sys_content=self.sys_content, message_user=message)
-        message_user = fun_model
-        
-        return  message_user
+        modelGeneral = GeneralModel()
+        fun_model = await modelGeneral.responseGeneral(message_user=message)
+        return fun_model
 
     async def main_engine(self, message):
         if self.EngineAV:
-            return await self.Edula_AV(message)
+            return await self.edulaAV(message)
         elif self.EngineChat:
-            return await self.Edula_General(message)
+            return await self.edulaGeneral(message)
         else:
             return "Motor no encontrado"
+
+class ControllerDataBase:
+    def createDatabase(self, nameCollection, dataContent):
+        try:
+            objCollectionDB = ModelDB()
+            createCollection = objCollectionDB.embeddingsDataBase(nameCollection=nameCollection, dataContext=dataContent)
+            if createCollection:
+                return {"success": "Colleccion creada"}
+            else:
+                return {'error': 'Error al crear la colleccion'}
+        except Exception as e:
+            return {'Exception error': f'Ocurrió un error al crear la colleccion: {str(e)}'}

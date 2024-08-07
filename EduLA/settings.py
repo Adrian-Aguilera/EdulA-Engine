@@ -32,13 +32,18 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'colorfield',
+    'admin_interface',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'EduApp',
+    'EduGeneralApp',
+    'EduAssistApp',
+    'DBConfigApp',
+    'ModelCustomApp',
     'rest_framework',
     'sslserver',
     'drf_yasg',
@@ -59,6 +64,7 @@ SIMPLE_JWT = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,7 +80,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'EduLA/templates'),
-            os.path.join(BASE_DIR, 'EduApp/templates'),
+            os.path.join(BASE_DIR, 'EduGeneralApp/templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -97,7 +103,7 @@ WSGI_APPLICATION = 'EduLA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'DB/db.sqlite3',
     }
 }
 #configuracion para usar mongodb como base de datos
@@ -158,18 +164,56 @@ CORS_ALLOWED_ORIGINS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+#base url static files (Configuracion principal)
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'EduLA/static')
 
 #archivos estaticos por app
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'EduApp/static'),
+    os.path.join(BASE_DIR, 'EduGeneralApp/static'),
 ]
 
+"""
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = True"""
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#logs python django
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'EduApp': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

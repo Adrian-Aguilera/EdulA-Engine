@@ -1,16 +1,16 @@
-
+ 
 # EdulA-Engine 
 
 EdulA es un motor que permite procesar lenguaje natural para hacer distintas actividades educativas
 
 ## Ejecutar local
-
+ 
 Clonar el repositorio 
 ```bash
   git clone https://github.com/Adrian-Aguilera/EdulA-Engine.git
 ```
 
-Go to the project directory
+Go to the project directory 
 
 ```bash
   cd /EdulA-Engine
@@ -23,26 +23,14 @@ Para poder instalar el proyecto, crearemos un .venv para instalar las dependenci
 
 ```bash
   python3 -m venv .venv
-  .venv\Scripts\activate
+```
+```bash
+.venv\Scripts\activate
 ```
 una vez instalado y corriendo la terminal del .venv, instalar las dependencias corriendo
 
 ```bash
   pip install -r requirements.txt
-```
-
-## Deployment
-
-Ejecutar servidor local
-
-```bash
-  python manage.py runserver
-```
-
-Ejecutar servidor local  con certificado ssl (recomendado)
-
-```bash
-  python manage.py runsslserver
 ```
 
 ## Informacion Adicional
@@ -63,6 +51,35 @@ Crear migraciones del proyecto
 Crear usuario administrador
 ```bash
   python manage.py createsuperuser
+```
+
+## Instalacion de los temas para el panel admin de django
+luego de hacer las migraciones instalar los temas de para django:
+
+##### [Django](https://www.djangoproject.com/) theme (default):
+Run `python manage.py loaddata admin_interface_theme_django.json`
+
+##### [Bootstrap](http://getbootstrap.com/) theme:
+Run `python manage.py loaddata admin_interface_theme_bootstrap.json`
+
+##### [Foundation](http://foundation.zurb.com/) theme:
+Run `python manage.py loaddata admin_interface_theme_foundation.json`
+
+##### [U.S. Web Design Standards](https://standards.usa.gov/) theme:
+Run `python manage.py loaddata admin_interface_theme_uswds.json`
+
+## Deployment
+
+Ejecutar servidor local
+
+```bash
+  python manage.py runserver
+```
+
+Ejecutar servidor local  con certificado ssl (recomendado)
+
+```bash
+  python manage.py runsslserver
 ```
 
 ## Json general chat:
@@ -119,3 +136,7 @@ Abreviaturas de nombres de los distintos modulos:
 **EduApp:** Aplicacion principal de Django
 
 
+# Indicaciones Iniciales:
+Crear una carpeta llamada DB en la raiz del proyecto
+
+Crear una carpeta llamada static en EduGeneralApp
