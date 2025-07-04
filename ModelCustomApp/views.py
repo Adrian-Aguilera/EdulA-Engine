@@ -25,11 +25,11 @@ class CustomModel(APIView):
         if request.method == "POST":
             try:
                 dataRequests = request.data['modelfile']
-                modelfile = f'''
-                    FROM {dataRequests['modelo']}
-                    PARAMETER temperature {float(dataRequests['temperatura'])}
-                    SYSTEM {dataRequests['systemContent']}
-                '''
+                modelfile={
+                    'modelo': dataRequests['modelo'],
+                    'temperatura': dataRequests['temperatura'],
+                    'systemContent': dataRequests['systemContent']
+                }
                 modelName = dataRequests['nombre']
                 ollamaResponse = callCreateModel(modelName=modelName, modelfile=modelfile)
                 return Response(ollamaResponse)
@@ -99,7 +99,7 @@ class CustomModel(APIView):
 
 def callCreateModel(modelName,modelfile):
     try:
-        ollmaResponse = ollamaClient.create(model=modelName, modelfile=modelfile)
+        ollmaResponse = ollamaClient.create(model=modelName, from_=modelfile['modelo'], system=modelfile['systemContent'])
         if ollmaResponse['status'] == "success":
             return {"response": "modelo creado correctamente"}
         else:
