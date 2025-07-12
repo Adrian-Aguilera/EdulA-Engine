@@ -12,7 +12,7 @@ class PerfilTokenObtainPairSerializer(TokenObtainPairSerializer):
         password = attrs.get('password')
  
         if carnet and password:
-            estudiante = PerfilBackend.authenticate(carnet=carnet, password=password)  # Autenticar con carnet y password
+            estudiante = PerfilBackend.authenticate(request=None, carnet=carnet, password=password)  # Autenticar con carnet y password
 
             if estudiante is None:
                 raise serializers.ValidationError(
