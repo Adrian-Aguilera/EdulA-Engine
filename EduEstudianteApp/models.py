@@ -5,6 +5,9 @@ class PerfilEstudiante(models.Model):
     carnet = models.CharField(max_length=6, help_text='numero de carnet del estudiante', unique=True)
     password = models.CharField(max_length=128, help_text='contraseña del estudiante')
 
+    @property
+    def is_authenticated(self):
+        return True
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
 
