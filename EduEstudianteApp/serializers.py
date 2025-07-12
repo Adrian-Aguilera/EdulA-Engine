@@ -1,9 +1,9 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import serializers
-from .backends import PerfilBackend
+from django.contrib.auth import authenticate
 from .models import PerfilEstudiante
 
-class PerfilTokenObtainPairSerializer(TokenObtainPairSerializer):
+class loginSerializer(TokenObtainPairSerializer):
     carnet = serializers.CharField(required=True)  # Cambiar el campo a carnet
 
     def validate(self, attrs):
@@ -12,7 +12,7 @@ class PerfilTokenObtainPairSerializer(TokenObtainPairSerializer):
         password = attrs.get('password')
  
         if carnet and password:
-            estudiante = PerfilBackend.authenticate(request=None, carnet=carnet, password=password)  # Autenticar con carnet y password
+            estudiante = authenticate(request=None, carnet=carnet, password=password)  # Autenticar con carnet y password
 
             if estudiante is None:
                 raise serializers.ValidationError(
