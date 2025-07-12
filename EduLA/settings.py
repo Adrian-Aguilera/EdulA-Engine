@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'EduEstudianteApp.authentication.JWTAuthenticationEstudiante',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
