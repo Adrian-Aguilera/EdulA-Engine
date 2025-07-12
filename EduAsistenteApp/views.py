@@ -27,6 +27,8 @@ class AsistenteEdula(APIView):
     def AsistenteChat(request):
         if request.method == "POST":
             try:
+                print("Usuario:", request.user)
+                print("Autenticado:", request.user.is_authenticated)
                 # Obtener datos del request
                 data_requests = request.data
                 id_estudiante = data_requests.get("id_estudiante")
