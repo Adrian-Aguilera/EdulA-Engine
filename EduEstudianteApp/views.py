@@ -1,12 +1,9 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import PerfilTokenObtainPairSerializer, PerfilSerializer
+from .serializers import loginSerializer, PerfilSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
-class PerfilTokenObtainPairView(TokenObtainPairView):
-    serializer_class = PerfilTokenObtainPairSerializer
 
 class LoginEstudiante(APIView):
     @api_view(['POST'])
@@ -16,7 +13,7 @@ class LoginEstudiante(APIView):
                 data = request.data
                 carnet = data.get('carnet')
                 password = data.get('password')
-                serializerTokens = PerfilTokenObtainPairSerializer()
+                serializerTokens = loginSerializer()
                 obtenerTokens = serializerTokens.validate(attrs={'carnet': carnet, 'password': password})
                 return Response({"data": obtenerTokens})
             except Exception as e:
